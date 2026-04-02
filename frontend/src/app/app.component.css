@@ -1,0 +1,270 @@
+:host {
+  display: block;
+}
+
+.page-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 20px 48px;
+}
+
+.hero {
+  display: grid;
+  gap: 24px;
+  align-items: end;
+  grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.8fr);
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  color: #ea580c;
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h2 {
+  margin: 0;
+  font-size: clamp(2.2rem, 4vw, 4rem);
+  line-height: 1.02;
+  color: #111827;
+}
+
+.hero-copy {
+  max-width: 62ch;
+  margin: 14px 0 0;
+  color: #4b5563;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.search-box {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid rgba(249, 115, 22, 0.18);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.78);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+}
+
+.search-box span {
+  color: #374151;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: #fff;
+  color: #111827;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-box input:focus {
+  border-color: #fb923c;
+  box-shadow: 0 0 0 4px rgba(251, 146, 60, 0.16);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.stats article {
+  padding: 18px 20px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.05);
+}
+
+.stats strong {
+  display: block;
+  color: #111827;
+  font-size: 1.75rem;
+}
+
+.stats span {
+  color: #6b7280;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+  gap: 20px;
+}
+
+.recipe-list {
+  display: grid;
+  gap: 14px;
+}
+
+.recipe-card,
+.detail-panel,
+.info-card {
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.06);
+}
+
+.recipe-card {
+  width: 100%;
+  padding: 18px;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.recipe-card:hover,
+.recipe-card.active {
+  transform: translateY(-2px);
+  border-color: rgba(249, 115, 22, 0.42);
+  box-shadow: 0 20px 40px rgba(249, 115, 22, 0.12);
+}
+
+.card-top,
+.detail-meta,
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.card-top {
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.difficulty,
+.time,
+.detail-meta span,
+.tag-row span {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.difficulty {
+  background: rgba(16, 185, 129, 0.14);
+  color: #047857;
+}
+
+.time {
+  background: rgba(249, 115, 22, 0.12);
+  color: #c2410c;
+}
+
+.recipe-card h2,
+.detail-panel h2,
+.detail-block h3 {
+  margin: 0;
+}
+
+.recipe-card h2 {
+  color: #111827;
+  font-size: 1.25rem;
+}
+
+.recipe-card p,
+.detail-description,
+.info-card {
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.tag-row {
+  margin-top: 16px;
+}
+
+.tag-row span,
+.detail-meta span {
+  background: #f8fafc;
+  color: #374151;
+}
+
+.detail-panel {
+  padding: 24px;
+  position: sticky;
+  top: 20px;
+  align-self: start;
+}
+
+.detail-label {
+  margin: 0 0 8px;
+  color: #ea580c;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.detail-meta {
+  margin: 18px 0 24px;
+}
+
+.detail-block + .detail-block {
+  margin-top: 22px;
+}
+
+.detail-block ul,
+.detail-block ol {
+  margin: 14px 0 0;
+  padding-left: 20px;
+  color: #374151;
+}
+
+.detail-block li + li {
+  margin-top: 10px;
+}
+
+.info-card {
+  padding: 20px;
+}
+
+.info-card.error {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(254, 242, 242, 0.95);
+  color: #b91c1c;
+}
+
+@media (max-width: 960px) {
+  .hero,
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    padding-inline: 14px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .recipe-card,
+  .detail-panel {
+    border-radius: 20px;
+  }
+}

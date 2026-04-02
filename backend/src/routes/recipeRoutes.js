@@ -17,19 +17,13 @@ const {
     deleteRecipe
 } = require('../controllers/recipeController');
 
-// Crear nueva receta
-router.post('/recipes', createRecipe);
+router.route('/recipes')
+    .get(getRecipes)
+    .post(createRecipe);
 
-// Obtener todas las recetas
-router.get('/recipes', getRecipes);
-
-// Obtener una receta por ID
-router.get('/recipes/:id', getRecipeById);
-
-// Actualizar receta por ID
-router.put('/recipes/:id', updateRecipe);
-
-// Eliminar receta por ID
-router.delete('/recipes/:id', deleteRecipe);
+router.route('/recipes/:id')
+    .get(getRecipeById)
+    .put(updateRecipe)
+    .delete(deleteRecipe);
 
 module.exports = router;

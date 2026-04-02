@@ -1,0 +1,14 @@
+[
+  {
+    "title": "Brownies Clásicos",
+    "ingredients": ["200g chocolate", "150g mantequilla", "2 huevos", "1 taza harina", "azúcar"],
+    "steps": ["Derretir chocolate y mantequilla", "Mezclar con huevos y azúcar", "Incorporar harina", "Hornear 25 minutos a 180°C"],
+    "tags": ["chocolate", "postre", "rápido"]
+  },
+  {
+    "title": "Tiramisú",
+    "ingredients": ["Mascarpone", "Café fuerte", "Bizcochos de soletilla", "Cacao en polvo", "Azúcar"],
+    "steps": ["Preparar crema mascarpone con azúcar", "Mojar bizcochos en café", "Montar capas: crema, bizcochos, crema", "Refrigerar 4 horas", "Espolvorear cacao antes de servir"],
+    "tags": ["frío", "postre", "italiano"]
+  }
+]

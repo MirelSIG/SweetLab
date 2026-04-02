@@ -1,0 +1,21 @@
+{
+  "name": "sweetlab-backend",
+  "version": "1.0.0",
+  "description": "SweetLab API backend",
+  "main": "src/server.js",
+  "private": true,
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.8.1"
+  }
+}

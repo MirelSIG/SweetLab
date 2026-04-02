@@ -1,0 +1,93 @@
+<main class="page-shell">
+  <section class="hero">
+    <div>
+      <p class="eyebrow">SweetLab</p>
+      <h2>Laboratorio de ensayo de tus Recetas dulces y saladas</h2>
+      <p class="hero-copy">
+        Esta versión usa Angular para leer recetas desde la API backend (MongoDB) y mostrarlas en una interfaz moderna.
+      </p>
+    </div>
+
+    <label class="search-box">
+      <span>Buscar receta</span>
+      <input
+        type="text"
+        [value]="searchTerm"
+        (input)="onSearch($event)"
+        placeholder="Tarta, sopa, chocolate..."
+      >
+    </label>
+  </section>
+
+  <section class="stats" aria-label="Resumen de recetas">
+    <article>
+      <strong>{{ totalRecipes }}</strong>
+      <span>Recetas</span>
+    </article>
+    <article>
+      <strong>{{ totalIngredients }}</strong>
+      <span>Ingredientes únicos</span>
+    </article>
+    <article>
+      <strong>{{ totalSteps }}</strong>
+      <span>Pasos totales</span>
+    </article>
+  </section>
+
+  <section class="content-grid">
+    <div class="recipe-list" aria-label="Listado de recetas">
+      <div *ngIf="loading" class="info-card">Cargando recetas...</div>
+      <div *ngIf="errorMessage" class="info-card error">{{ errorMessage }}</div>
+
+      <button
+        *ngFor="let recipe of filteredRecipes; trackBy: trackByRecipe"
+        type="button"
+        class="recipe-card"
+        [class.active]="(selectedRecipe?._id || selectedRecipe?.id) === (recipe._id || recipe.id)"
+        (click)="selectRecipe(recipe)"
+      >
+        <div class="card-top">
+          <span *ngIf="recipe.difficulty" class="difficulty">{{ recipe.difficulty }}</span>
+          <span *ngIf="recipe.prepTime" class="time">{{ recipe.prepTime }} min</span>
+        </div>
+
+        <h2>{{ recipe.title }}</h2>
+        <p *ngIf="recipe.description">{{ recipe.description }}</p>
+
+        <div class="tag-row" *ngIf="recipe.tags && recipe.tags.length > 0">
+          <span *ngFor="let tag of recipe.tags">#{{ tag }}</span>
+        </div>
+      </button>
+
+      <div *ngIf="!loading && !errorMessage && filteredRecipes.length === 0" class="info-card">
+        No hay resultados para tu búsqueda.
+      </div>
+    </div>
+
+    <aside class="detail-panel" *ngIf="selectedRecipe as recipe">
+      <p class="detail-label">Receta seleccionada</p>
+      <h2>{{ recipe.title }}</h2>
+      <p *ngIf="recipe.description" class="detail-description">{{ recipe.description }}</p>
+
+      <div class="detail-meta" *ngIf="recipe.prepTime || recipe.servings || recipe.difficulty">
+        <span *ngIf="recipe.prepTime">{{ recipe.prepTime }} min</span>
+        <span *ngIf="recipe.servings">{{ recipe.servings }} porciones</span>
+        <span *ngIf="recipe.difficulty">{{ recipe.difficulty }}</span>
+      </div>
+
+      <div class="detail-block">
+        <h3>Ingredientes</h3>
+        <ul>
+          <li *ngFor="let ingredient of recipe.ingredients">{{ ingredient }}</li>
+        </ul>
+      </div>
+
+      <div class="detail-block">
+        <h3>Preparación</h3>
+        <ol>
+          <li *ngFor="let step of recipe.steps">{{ step }}</li>
+        </ol>
+      </div>
+    </aside>
+  </section>
+</main>

@@ -1,0 +1,139 @@
+[
+  {
+    "id": "luna-vainilla",
+    "title": "Tarta Lunar de Vainilla",
+    "description": "Bizcocho suave con crema de vainilla y brillo de azúcar dorado.",
+    "ingredients": [
+      "2 tazas de harina",
+      "1 taza de azúcar",
+      "3 huevos",
+      "1 taza de leche",
+      "2 cucharaditas de esencia de vainilla",
+      "100 g de mantequilla"
+    ],
+    "steps": [
+      "Mezclar los ingredientes secos en un bol grande.",
+      "Agregar huevos, leche y mantequilla derretida hasta obtener una masa homogénea.",
+      "Hornear a 180 °C durante 35 minutos.",
+      "Cubrir con crema de vainilla y terminar con azúcar dorado."
+    ],
+    "tags": ["postre", "festivo", "vainilla"],
+    "prepTime": 50,
+    "servings": 8,
+    "difficulty": "Media"
+  },
+  {
+    "id": "sol-naranja",
+    "title": "Mousse Solar de Naranja",
+    "description": "Postre cítrico y ligero con notas frescas de ralladura de naranja.",
+    "ingredients": [
+      "2 naranjas grandes",
+      "250 ml de crema para batir",
+      "1/2 taza de yogur natural",
+      "3 cucharadas de miel",
+      "1 sobre de gelatina sin sabor"
+    ],
+    "steps": [
+      "Hidratar la gelatina y reservar.",
+      "Licuar la pulpa de naranja con miel y yogur.",
+      "Incorporar la crema batida y la gelatina disuelta.",
+      "Refrigerar durante 3 horas antes de servir."
+    ],
+    "tags": ["postre", "cítrico", "rápido"],
+    "prepTime": 20,
+    "servings": 4,
+    "difficulty": "Fácil"
+  },
+  {
+    "id": "bosque-vegano",
+    "title": "Ensalada Bosque Esmeralda",
+    "description": "Ensalada verde con aguacate, pepino y semillas tostadas.",
+    "ingredients": [
+      "2 tazas de espinaca baby",
+      "1 aguacate",
+      "1 pepino",
+      "1/2 taza de arándanos",
+      "2 cucharadas de semillas de girasol",
+      "Aliño de limón y aceite de oliva"
+    ],
+    "steps": [
+      "Lavar y secar las hojas verdes.",
+      "Cortar el aguacate y el pepino en láminas finas.",
+      "Mezclar con arándanos y semillas tostadas.",
+      "Aliñar justo antes de servir."
+    ],
+    "tags": ["saludable", "vegano", "ensalada"],
+    "prepTime": 15,
+    "servings": 2,
+    "difficulty": "Fácil"
+  },
+  {
+    "id": "marea-picante",
+    "title": "Sopa de Marea Picante",
+    "description": "Caldo especiado con vegetales, maíz y un toque de chile ahumado.",
+    "ingredients": [
+      "1 cebolla",
+      "2 dientes de ajo",
+      "2 zanahorias",
+      "1 lata de maíz",
+      "1 litro de caldo de verduras",
+      "1 cucharadita de chile ahumado"
+    ],
+    "steps": [
+      "Sofreír cebolla y ajo hasta que estén dorados.",
+      "Añadir zanahoria y maíz, cocinando por 5 minutos.",
+      "Verter el caldo y sazonar con chile ahumado.",
+      "Cocinar a fuego medio durante 20 minutos."
+    ],
+    "tags": ["sopa", "picante", "invierno"],
+    "prepTime": 35,
+    "servings": 4,
+    "difficulty": "Media"
+  },
+  {
+    "id": "cacao-nocturno",
+    "title": "Galletas de Cacao Nocturno",
+    "description": "Galletas oscuras con chispas de chocolate y sal marina.",
+    "ingredients": [
+      "1 taza de mantequilla",
+      "1 taza de azúcar morena",
+      "2 tazas de harina",
+      "1/2 taza de cacao en polvo",
+      "1 huevo",
+      "1 taza de chispas de chocolate"
+    ],
+    "steps": [
+      "Batir la mantequilla con el azúcar hasta cremar.",
+      "Integrar el huevo y el cacao.",
+      "Añadir harina y chispas de chocolate.",
+      "Hornear por 12 minutos a 190 °C."
+    ],
+    "tags": ["galletas", "chocolate", "snack"],
+    "prepTime": 25,
+    "servings": 12,
+    "difficulty": "Fácil"
+  },
+  {
+    "id": "jardin-citron",
+    "title": "Tostadas Jardín Citron",
+    "description": "Tostadas con hummus, hierbas frescas y limón confitado.",
+    "ingredients": [
+      "4 rebanadas de pan artesanal",
+      "1 taza de hummus",
+      "Hojas de albahaca fresca",
+      "1 limón confitado",
+      "Aceite de oliva",
+      "Pimienta negra molida"
+    ],
+    "steps": [
+      "Tostar el pan hasta que esté crujiente.",
+      "Untar una capa generosa de hummus.",
+      "Agregar limón confitado y hojas de albahaca.",
+      "Terminar con aceite de oliva y pimienta negra."
+    ],
+    "tags": ["desayuno", "rápido", "mediterráneo"],
+    "prepTime": 10,
+    "servings": 2,
+    "difficulty": "Fácil"
+  }
+]
