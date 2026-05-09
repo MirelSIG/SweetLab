@@ -2,10 +2,7 @@
   <section class="hero">
     <div>
       <p class="eyebrow">SweetLab</p>
-      <h2>Laboratorio de ensayo de tus Recetas dulces y saladas</h2>
-      <p class="hero-copy">
-        Esta versión usa Angular para leer recetas desde la API backend (MongoDB) y mostrarlas en una interfaz moderna.
-      </p>
+      <h2>Laboratorio de ensayo de tus recetas</h2>
     </div>
 
     <label class="search-box">
@@ -36,6 +33,59 @@
 
   <section class="content-grid">
     <div class="recipe-list" aria-label="Listado de recetas">
+      <div class="controls">
+        <button type="button" class="btn-primary" (click)="toggleJsonEditor()">Añadir receta</button>
+      </div>
+
+      <div *ngIf="showJsonEditor" class="editor-shell">
+        <div class="editor-tabs">
+
+          <button type="button" class="close-btn" (click)="toggleJsonEditor()">Cerrar</button>
+        </div>
+
+        <!-- Formulario amigable -->
+        <form *ngIf="editorMode === 'form'" (ngSubmit)="submitSimpleForm()" class="simple-form">
+          <label>Nombre de tu receta</label>
+          <input type="text" [(ngModel)]="simpleTitle" (ngModelChange)="saveDraft()" name="title" required />
+
+          <label>Ingredientes (Ingresa una por línea o separadas por comas)</label>
+          <textarea [(ngModel)]="simpleIngredients" (ngModelChange)="saveDraft()" name="ingredients" rows="4"></textarea>
+
+          <label>Pasos (Escribe cada paso en una línea)</label>
+          <textarea [(ngModel)]="simpleSteps" (ngModelChange)="saveDraft()" name="steps" rows="6"></textarea>
+
+          <label>Tags (Usa # y separa con comas)</label>
+          <input type="text" [(ngModel)]="simpleTags" (ngModelChange)="saveDraft()" name="tags" placeholder="Ej.: #postre, #rápido, #fácil" />
+
+          <label>Tiempo de elaboración (minutos)</label>
+          <input type="number" min="1" [(ngModel)]="simplePrepTime" (ngModelChange)="saveDraft()" name="prepTime" placeholder="Ej.: 45" />
+
+          <label>Nivel de dificultad</label>
+          <select [(ngModel)]="simpleDifficulty" (ngModelChange)="saveDraft()" name="difficulty">
+            <option value="">Selecciona una opción</option>
+            <option value="Fácil">Fácil</option>
+            <option value="Media">Media</option>
+            <option value="Alta">Alta</option>
+          </select>
+
+          <div class="form-actions">
+            <button type="submit" [disabled]="submittingRaw">Guardar receta</button>
+            <button type="button" (click)="resetSimpleForm()">Limpiar</button>
+          </div>
+        </form>
+
+        <!-- Editor JSON avanzado -->
+        <div *ngIf="editorMode === 'json'" class="json-editor">
+          <label>JSON de la receta (se enviará tal cual, sin restricciones):</label>
+          <textarea [(ngModel)]="rawJson" rows="10" cols="40"></textarea>
+          <div class="editor-actions">
+            <button type="button" (click)="submitRawJson()" [disabled]="submittingRaw">Enviar JSON</button>
+          </div>
+        </div>
+
+        <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+        <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+      </div>
       <div *ngIf="loading" class="info-card">Cargando recetas...</div>
       <div *ngIf="errorMessage" class="info-card error">{{ errorMessage }}</div>
 

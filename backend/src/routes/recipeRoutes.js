@@ -17,9 +17,14 @@ const {
     deleteRecipe
 } = require('../controllers/recipeController');
 
+const { createRawRecipe } = require('../controllers/recipeController');
+
 router.route('/recipes')
     .get(getRecipes)
     .post(createRecipe);
+
+// Ruta para insertar recetas sin validaciones (acepta JSON libre)
+router.post('/recipes/raw', createRawRecipe);
 
 router.route('/recipes/:id')
     .get(getRecipeById)

@@ -136,3 +136,17 @@ exports.deleteRecipe = async (req, res) => {
   }
 };
 
+// Crear receta sin validaciones (inserción raw en la colección Mongo)
+exports.createRawRecipe = async (req, res) => {
+  try {
+    // Inserta el documento tal cual en la colección subyacente, evitando el modelo Mongoose
+    const db = mongoose.connection.db;
+    const result = await db.collection('recipes').insertOne(req.body);
+    // Devolver el documento insertado con su _id
+    const inserted = await db.collection('recipes').findOne({ _id: result.insertedId });
+    res.status(201).json(inserted);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+

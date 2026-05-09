@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Recipe } from './recipe.model';
 import { RecipeService } from './recipe.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -83,5 +84,158 @@ export class AppComponent implements OnInit {
 
   trackByRecipe(_: number, recipe: Recipe): string {
     return recipe._id || recipe.id || '';
+  }
+
+  // --- JSON libre (sin restricciones) ---
+  showJsonEditor = false;
+  rawJson = '{\n  "title": "Nueva receta libre",\n  "ingredients": ["ingrediente 1"],\n  "steps": ["paso 1"]\n}';
+  submittingRaw = false;
+  editorMode: 'form' | 'json' = 'form';
+
+  // Formulario amigable (no requiere conocimientos de JSON)
+  simpleTitle = '';
+  simpleIngredients = '';
+  simpleSteps = '';
+  simpleTags = '';
+  simplePrepTime = '';
+  simpleDifficulty: '' | 'Fácil' | 'Media' | 'Alta' = '';
+  successMessage = '';
+
+  toggleJsonEditor(): void {
+    this.showJsonEditor = !this.showJsonEditor;
+    this.successMessage = '';
+    this.errorMessage = '';
+    if (this.showJsonEditor) {
+      this.loadDraft();
+    }
+  }
+
+  // Guardado automático en localStorage
+  private draftKey = 'simpleRecipeDraft';
+
+  saveDraft(): void {
+    const draft = {
+      title: this.simpleTitle,
+      ingredients: this.simpleIngredients,
+      steps: this.simpleSteps,
+      tags: this.simpleTags,
+      prepTime: this.simplePrepTime,
+      difficulty: this.simpleDifficulty,
+      editorMode: this.editorMode
+    };
+    try {
+      localStorage.setItem(this.draftKey, JSON.stringify(draft));
+    } catch (e) {
+      // ignore storage errors
+    }
+  }
+
+  loadDraft(): void {
+    try {
+      const raw = localStorage.getItem(this.draftKey);
+      if (!raw) return;
+      const draft = JSON.parse(raw);
+      this.simpleTitle = draft.title || '';
+      this.simpleIngredients = draft.ingredients || '';
+      this.simpleSteps = draft.steps || '';
+      this.simpleTags = draft.tags || '';
+      this.simplePrepTime = draft.prepTime || '';
+      this.simpleDifficulty = draft.difficulty || '';
+      this.editorMode = draft.editorMode || this.editorMode;
+    } catch (e) {
+      // ignore parse errors
+    }
+  }
+
+  submitRawJson(): void {
+    let payload: any;
+    try {
+      payload = JSON.parse(this.rawJson);
+    } catch (err) {
+      this.errorMessage = 'JSON inválido. Corrige la sintaxis antes de enviar.';
+      return;
+    }
+
+    this.submittingRaw = true;
+    this.recipeService.createRawRecipe(payload).subscribe({
+      next: (inserted) => {
+        this.submittingRaw = false;
+        this.errorMessage = '';
+        this.showJsonEditor = false;
+        // recargar lista
+        this.loadRecipes();
+        this.successMessage = 'Receta enviada correctamente.';
+      },
+      error: (err) => {
+        console.error('Error al insertar JSON raw:', err);
+        this.submittingRaw = false;
+        this.errorMessage = 'Error al insertar la receta (ver consola).';
+      }
+    });
+  }
+
+  // Construye el objeto desde el formulario amigable y lo envía
+  submitSimpleForm(): void {
+    if (!this.simpleTitle || this.simpleTitle.trim() === '') {
+      this.errorMessage = 'El título es obligatorio.';
+      return;
+    }
+
+    const ingredients = this.simpleIngredients
+      .split(/\r?\n|,/) // acepta líneas o comas
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    const steps = this.simpleSteps
+      .split(/\r?\n/) // cada línea es un paso
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    const tags = this.simpleTags
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    const payload: any = {
+      title: this.simpleTitle.trim(),
+      ingredients: ingredients.length ? ingredients : [''],
+      steps: steps.length ? steps : [''],
+    };
+
+    if (tags.length) payload.tags = tags;
+    if (this.simplePrepTime && Number(this.simplePrepTime) > 0) {
+      payload.prepTime = Number(this.simplePrepTime);
+    }
+    if (this.simpleDifficulty) {
+      payload.difficulty = this.simpleDifficulty;
+    }
+
+    this.submittingRaw = true;
+    this.recipeService.createRawRecipe(payload).subscribe({
+      next: () => {
+        this.submittingRaw = false;
+        this.errorMessage = '';
+        this.successMessage = 'Receta creada correctamente.';
+        this.showJsonEditor = false;
+        this.resetSimpleForm();
+        this.loadRecipes();
+      },
+      error: (err) => {
+        console.error('Error al insertar receta simple:', err);
+        this.submittingRaw = false;
+        this.errorMessage = 'Error al insertar la receta (ver consola).';
+      }
+    });
+  }
+
+  resetSimpleForm(): void {
+    this.simpleTitle = '';
+    this.simpleIngredients = '';
+    this.simpleSteps = '';
+    this.simpleTags = '';
+    this.simplePrepTime = '';
+    this.simpleDifficulty = '';
+    this.successMessage = '';
+    this.errorMessage = '';
   }
 }

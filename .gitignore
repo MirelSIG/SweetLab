@@ -1,0 +1,19 @@
+# Environment files
+backend/.env
+
+# Node modules
+**/node_modules
+
+# Angular cache
+frontend/.angular/
+.angular/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Build outputs
+frontend/dist
+backend/dist

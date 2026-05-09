@@ -303,7 +303,7 @@ cd frontend
 npm start
 ```
 
-3. Abre <http://localhost:4200> en el navegador.
+3. Abre Sweetlab en el navegador.
 
 2. Si el backend no responde, verás este mensaje:
 

@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "ng serve",
+    "serve:sweetlab": "bash ../scripts/serve-sweetlab.sh",
     "build": "ng build",
     "watch": "ng build --watch --configuration development"
   },
