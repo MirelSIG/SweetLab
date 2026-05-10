@@ -345,12 +345,45 @@ Tu app estará disponible en: `https://TU_USUARIO.github.io/SweetLab/`
 
 Ver guía completa en: [docs/github-pages-setup.md](docs/github-pages-setup.md)
 
-## 15) Proximo paso sugerido
+## 15) Funcionalidades CRUD completadas (YA IMPLEMENTADAS)
 
-Construir formularios en Angular para agregar funcionalidad de CRUD completo en la interfaz:
-- Crear nueva receta desde el frontend.
-- Editar receta existente.
-- Eliminar receta en tiempo real.
+### ✅ 1. Editar recetas
 
-Esto te permitirá practicar Angular two-way binding, events, y manejo de respuestas HTTP.
+Ahora puedes editar cualquier receta que hayas seleccionado:
+
+1. Selecciona una receta en la lista
+2. Presiona el botón **✏️ Editar**
+3. Modifica los campos que quieras (título, ingredientes, pasos, tags, tiempo, dificultad)
+4. Presiona **Guardar cambios**
+
+Los cambios se envían a la API y se reflejan inmediatamente en la lista.
+
+### ✅ 2. Eliminar recetas
+
+Para eliminar una receta:
+
+1. Selecciona la receta que quieres eliminar
+2. Presiona el botón **🗑️ Eliminar**
+3. Confirma que quieres eliminarla en el diálogo
+4. La receta se eliminará de MongoDB y desaparecerá de la lista
+
+### ✅ 3. Apertura automática del navegador
+
+El frontend ahora abre automáticamente el navegador cuando inicias el servidor:
+
+```bash
+cd frontend
+npm start
+```
+
+El navegador se abrirá automáticamente en `http://localhost:4200` (o en el puerto configurado).
+
+### En resumen: CRUD completo
+
+- ✅ **Create** (Crear): Botón "Añadir receta" con formulario amigable o JSON
+- ✅ **Read** (Leer): Lista de recetas con búsqueda y selección
+- ✅ **Update** (Editar): Botón "Editar" en cada receta
+- ✅ **Delete** (Eliminar): Botón "Eliminar" con confirmación
+
+## 16) Proximo paso sugerido (opcional)
 

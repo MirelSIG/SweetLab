@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "start": "ng serve",
+    "start": "ng serve --open",
     "serve:sweetlab": "bash ../scripts/serve-sweetlab.sh",
     "build": "ng build",
     "build:prod": "ng build --configuration production",

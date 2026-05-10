@@ -26,4 +26,4 @@ cd "$(dirname "$0")/.." || exit 1
 cd frontend
 
 # Use npx to ensure ng esté disponible incluso si no está globalmente instalado
-npx ng serve --host 0.0.0.0 --port 4200
+npx ng serve --host 0.0.0.0 --port 4200 --open

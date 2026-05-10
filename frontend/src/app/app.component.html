@@ -114,29 +114,83 @@
       </div>
     </div>
 
-    <aside class="detail-panel" *ngIf="selectedRecipe as recipe">
-      <p class="detail-label">Receta seleccionada</p>
-      <h2>{{ recipe.title }}</h2>
-      <p *ngIf="recipe.description" class="detail-description">{{ recipe.description }}</p>
+    <aside class="detail-panel">
+      <!-- Modo visualización -->
+      <div *ngIf="selectedRecipe as recipe">
+        <div *ngIf="!isEditingRecipe(recipe)">
+          <p class="detail-label">Receta seleccionada</p>
+        <h2>{{ recipe.title }}</h2>
+        <p *ngIf="recipe.description" class="detail-description">{{ recipe.description }}</p>
 
-      <div class="detail-meta" *ngIf="recipe.prepTime || recipe.servings || recipe.difficulty">
-        <span *ngIf="recipe.prepTime">{{ recipe.prepTime }} min</span>
-        <span *ngIf="recipe.servings">{{ recipe.servings }} porciones</span>
-        <span *ngIf="recipe.difficulty">{{ recipe.difficulty }}</span>
+        <div class="detail-meta" *ngIf="recipe.prepTime || recipe.servings || recipe.difficulty">
+          <span *ngIf="recipe.prepTime">{{ recipe.prepTime }} min</span>
+          <span *ngIf="recipe.servings">{{ recipe.servings }} porciones</span>
+          <span *ngIf="recipe.difficulty">{{ recipe.difficulty }}</span>
+        </div>
+
+        <div class="detail-block">
+          <h3>Ingredientes</h3>
+          <ul>
+            <li *ngFor="let ingredient of recipe.ingredients">{{ ingredient }}</li>
+          </ul>
+        </div>
+
+        <div class="detail-block">
+          <h3>Preparación</h3>
+          <ol>
+            <li *ngFor="let step of recipe.steps">{{ step }}</li>
+          </ol>
+        </div>
+
+          <div class="detail-actions">
+            <button type="button" class="btn-edit" (click)="startEditing(recipe)">✏️ Editar</button>
+            <button type="button" class="btn-delete" (click)="deleteRecipe(recipe)">🗑️ Eliminar</button>
+          </div>
+        </div>
+
+        <!-- Modo edición -->
+        <div *ngIf="isEditingRecipe(recipe)" class="edit-form">
+        <p class="detail-label">Editando receta</p>
+        <h2>{{ editTitle }}</h2>
+
+        <form (ngSubmit)="submitEditForm()" class="simple-form">
+          <label>Nombre de la receta</label>
+          <input type="text" [(ngModel)]="editTitle" name="title" required />
+
+          <label>Ingredientes (Ingresa una por línea o separadas por comas)</label>
+          <textarea [(ngModel)]="editIngredients" name="ingredients" rows="4"></textarea>
+
+          <label>Pasos (Escribe cada paso en una línea)</label>
+          <textarea [(ngModel)]="editSteps" name="steps" rows="6"></textarea>
+
+          <label>Tags (Usa # y separa con comas)</label>
+          <input type="text" [(ngModel)]="editTags" name="tags" placeholder="Ej.: #postre, #rápido, #fácil" />
+
+          <label>Tiempo de elaboración (minutos)</label>
+          <input type="number" min="1" [(ngModel)]="editPrepTime" name="prepTime" placeholder="Ej.: 45" />
+
+          <label>Nivel de dificultad</label>
+          <select [(ngModel)]="editDifficulty" name="difficulty">
+            <option value="">Selecciona una opción</option>
+            <option value="Fácil">Fácil</option>
+            <option value="Media">Media</option>
+            <option value="Alta">Alta</option>
+          </select>
+
+          <div class="form-actions">
+            <button type="submit" [disabled]="submittingEdit">Guardar cambios</button>
+            <button type="button" (click)="cancelEditing()">Cancelar</button>
+          </div>
+        </form>
+
+        <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+        <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+        </div>
       </div>
 
-      <div class="detail-block">
-        <h3>Ingredientes</h3>
-        <ul>
-          <li *ngFor="let ingredient of recipe.ingredients">{{ ingredient }}</li>
-        </ul>
-      </div>
-
-      <div class="detail-block">
-        <h3>Preparación</h3>
-        <ol>
-          <li *ngFor="let step of recipe.steps">{{ step }}</li>
-        </ol>
+      <!-- Sin selección -->
+      <div *ngIf="!selectedRecipe && !editingRecipeId" class="detail-placeholder">
+        <p>Selecciona una receta para ver los detalles</p>
       </div>
     </aside>
   </section>

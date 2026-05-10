@@ -101,6 +101,16 @@ export class AppComponent implements OnInit {
   simpleDifficulty: '' | 'Fácil' | 'Media' | 'Alta' = '';
   successMessage = '';
 
+  // Estado para edición de recetas
+  editingRecipeId: string | null = null;
+  editTitle = '';
+  editIngredients = '';
+  editSteps = '';
+  editTags = '';
+  editPrepTime = '';
+  editDifficulty: '' | 'Fácil' | 'Media' | 'Alta' = '';
+  submittingEdit = false;
+
   toggleJsonEditor(): void {
     this.showJsonEditor = !this.showJsonEditor;
     this.successMessage = '';
@@ -237,5 +247,123 @@ export class AppComponent implements OnInit {
     this.simpleDifficulty = '';
     this.successMessage = '';
     this.errorMessage = '';
+  }
+
+  // Métodos de edición
+  startEditing(recipe: Recipe): void {
+    this.editingRecipeId = recipe._id || recipe.id || null;
+    this.editTitle = recipe.title;
+    this.editIngredients = recipe.ingredients.join('\n');
+    this.editSteps = recipe.steps.join('\n');
+    this.editTags = (recipe.tags || []).join(', ');
+    this.editPrepTime = recipe.prepTime?.toString() || '';
+    this.editDifficulty = recipe.difficulty || '';
+    this.showJsonEditor = false;
+    this.successMessage = '';
+    this.errorMessage = '';
+  }
+
+  cancelEditing(): void {
+    this.editingRecipeId = null;
+    this.editTitle = '';
+    this.editIngredients = '';
+    this.editSteps = '';
+    this.editTags = '';
+    this.editPrepTime = '';
+    this.editDifficulty = '';
+  }
+
+  submitEditForm(): void {
+    if (!this.editTitle || this.editTitle.trim() === '') {
+      this.errorMessage = 'El título es obligatorio.';
+      return;
+    }
+
+    if (!this.editingRecipeId) {
+      this.errorMessage = 'ID de receta no encontrado.';
+      return;
+    }
+
+    const ingredients = this.editIngredients
+      .split(/\r?\n|,/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    const steps = this.editSteps
+      .split(/\r?\n/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    const tags = this.editTags
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    const payload: any = {
+      title: this.editTitle.trim(),
+      ingredients: ingredients.length ? ingredients : [''],
+      steps: steps.length ? steps : [''],
+    };
+
+    if (tags.length) payload.tags = tags;
+    if (this.editPrepTime && Number(this.editPrepTime) > 0) {
+      payload.prepTime = Number(this.editPrepTime);
+    }
+    if (this.editDifficulty) {
+      payload.difficulty = this.editDifficulty;
+    }
+
+    this.submittingEdit = true;
+    this.recipeService.updateRecipe(this.editingRecipeId, payload).subscribe({
+      next: () => {
+        this.submittingEdit = false;
+        this.errorMessage = '';
+        this.successMessage = 'Receta actualizada correctamente.';
+        this.cancelEditing();
+        this.loadRecipes();
+      },
+      error: (err) => {
+        console.error('Error al actualizar receta:', err);
+        this.submittingEdit = false;
+        this.errorMessage = 'Error al actualizar la receta (ver consola).';
+      }
+    });
+  }
+
+  deleteRecipe(recipe: Recipe): void {
+    const recipeId = recipe._id || recipe.id;
+    if (!recipeId) {
+      this.errorMessage = 'ID de receta no encontrado.';
+      return;
+    }
+
+    const confirm = window.confirm(
+      `¿Estás seguro de que quieres eliminar "${recipe.title}"? Esta acción no se puede deshacer.`
+    );
+
+    if (!confirm) {
+      return;
+    }
+
+    this.recipeService.deleteRecipe(recipeId).subscribe({
+      next: () => {
+        this.errorMessage = '';
+        this.successMessage = `Receta "${recipe.title}" eliminada correctamente.`;
+        if (this.selectedRecipe?._id === recipeId || this.selectedRecipe?.id === recipeId) {
+          this.selectedRecipe = undefined;
+        }
+        this.loadRecipes();
+      },
+      error: (err) => {
+        console.error('Error al eliminar receta:', err);
+        this.errorMessage = 'Error al eliminar la receta (ver consola).';
+      }
+    });
+  }
+
+  // Método auxiliar para verificar si una receta está siendo editada
+  isEditingRecipe(recipe: Recipe): boolean {
+    const recipeId = recipe._id || recipe.id;
+    return this.editingRecipeId === recipeId;
   }
 }
