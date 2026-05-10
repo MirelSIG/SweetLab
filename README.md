@@ -5,6 +5,8 @@ Proyecto de practica para aprender desarrollo web con:
 - Backend con Node.js + Express + MongoDB (API REST de recetas)
 - Frontend con Angular (interfaz para mostrar recetas)
 
+**🚀 [Prueba la app en GitHub Pages](https://MirelSIG.github.io/SweetLab/)**
+
 Esta guia esta escrita para una persona que empieza en programacion web y tambien empieza con Angular.
 
 ## 1) Que hace este proyecto
