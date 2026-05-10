@@ -331,7 +331,21 @@ Para seguir aprendiendo, el proximo paso seria construir:
 
 Esto te permitirá practicar Angular two-way binding y events.
 
-## 14) Proximo paso sugerido
+## 14) Despliegue en GitHub Pages
+
+El frontend está configurado para desplegarse automáticamente en GitHub Pages.
+
+**Para activar:**
+
+1. Ve a Settings → Pages en tu repositorio de GitHub
+2. Selecciona "GitHub Actions" como fuente de deploy
+3. Haz push a la rama main
+
+Tu app estará disponible en: `https://TU_USUARIO.github.io/SweetLab/`
+
+Ver guía completa en: [docs/github-pages-setup.md](docs/github-pages-setup.md)
+
+## 15) Proximo paso sugerido
 
 Construir formularios en Angular para agregar funcionalidad de CRUD completo en la interfaz:
 - Crear nueva receta desde el frontend.
