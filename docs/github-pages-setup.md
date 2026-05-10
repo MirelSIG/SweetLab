@@ -27,7 +27,7 @@ Cada vez que hagas push a la rama `main` y modifiques archivos en la carpeta `fr
 1. ✅ Instala dependencias de Node.js
 2. ✅ Compila el Angular app en producción
 3. ✅ Sube los archivos compilados a GitHub Pages
-4. ✅ Tu app estará disponible en: `https://TU_USUARIO.github.io/SweetLab/`
+4. ✅ Tu app estará disponible en: `https://mirelsig.github.io/SweetLab/`
 
 ### Despliegue manual
 Si quieres desplegar sin hacer push:
