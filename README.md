@@ -355,7 +355,7 @@ El frontend está configurado para desplegarse automáticamente en GitHub Pages.
 2. Selecciona "GitHub Actions" como fuente de deploy
 3. Haz push a la rama main
 
-Tu app estará disponible en: `https://TU_USUARIO.github.io/SweetLab/`
+Tu app estará disponible en: `https://MirelSIG.github.io/SweetLab/`
 
 Ver guía completa en: [docs/github-pages-setup.md](docs/github-pages-setup.md)
 
