@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Recipe } from './recipe.model';
 import { RecipeService } from './recipe.service';
 
@@ -15,13 +16,76 @@ export class AppComponent implements OnInit {
   recipes: Recipe[] = [];
   selectedRecipe?: Recipe;
   searchTerm = '';
-  loading = true;
+  loading = false;
   errorMessage = '';
+  userRole: 'admin' | 'externo' | null = null;
+  loginUsername = '';
+  loginPassword = '';
 
   constructor(private readonly recipeService: RecipeService) {}
 
   ngOnInit(): void {
-    this.loadRecipes();
+    const storedToken = this.recipeService.getStoredToken();
+    const storedRole = this.recipeService.getStoredRole();
+
+    if (storedToken && storedRole) {
+      this.userRole = storedRole;
+      this.loadRecipes();
+      return;
+    }
+
+    this.errorMessage = 'Selecciona un rol para iniciar sesión: Admin o Usuario externo.';
+  }
+
+  get isAuthenticated(): boolean {
+    return !!this.userRole;
+  }
+
+  get isAdmin(): boolean {
+    return this.userRole === 'admin';
+  }
+
+  loginAs(role: 'admin' | 'externo'): void {
+    if (!this.loginUsername.trim() || !this.loginPassword.trim()) {
+      this.errorMessage = 'Ingresa usuario y contraseña para iniciar sesión.';
+      return;
+    }
+
+    this.loading = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    this.recipeService.login(role, this.loginUsername.trim(), this.loginPassword).subscribe({
+      next: ({ token, refreshToken, role: loggedRole }) => {
+        this.recipeService.setSession(token, refreshToken, loggedRole);
+        this.userRole = loggedRole;
+        this.successMessage = `Sesión iniciada como ${loggedRole}.`;
+        this.loadRecipes();
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error al iniciar sesión:', error);
+        this.loading = false;
+        if (error.status === 401) {
+          this.errorMessage = 'Usuario o contraseña incorrectos para ese rol.';
+        } else if (error.status === 429) {
+          this.errorMessage = error.error?.message || 'Demasiados intentos fallidos. Intenta más tarde.';
+        } else {
+          this.errorMessage = 'No se pudo iniciar sesión. Verifica que el backend esté corriendo.';
+        }
+      }
+    });
+  }
+
+  logout(): void {
+    this.recipeService.clearSession(true);
+    this.userRole = null;
+    this.recipes = [];
+    this.selectedRecipe = undefined;
+    this.showJsonEditor = false;
+    this.cancelEditing();
+    this.loading = false;
+    this.successMessage = 'Sesión cerrada.';
+    this.errorMessage = 'Selecciona un rol para iniciar sesión: Admin o Usuario externo.';
   }
 
   private loadRecipes(): void {
@@ -35,7 +99,13 @@ export class AppComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar recetas:', error);
-        this.errorMessage = 'No se pudo conectar a la API. Verifica que el backend esté corriendo en http://localhost:4000';
+        if (error.status === 401) {
+          this.errorMessage = 'Tu sesión no es válida o expiró. Inicia sesión de nuevo.';
+          this.recipeService.clearSession();
+          this.userRole = null;
+        } else {
+          this.errorMessage = 'No se pudo conectar a la API. Verifica que el backend esté corriendo en http://localhost:4000';
+        }
         this.loading = false;
       }
     });
@@ -112,6 +182,11 @@ export class AppComponent implements OnInit {
   submittingEdit = false;
 
   toggleJsonEditor(): void {
+    if (!this.isAdmin) {
+      this.errorMessage = 'Solo el rol admin puede crear recetas.';
+      return;
+    }
+
     this.showJsonEditor = !this.showJsonEditor;
     this.successMessage = '';
     this.errorMessage = '';
@@ -158,6 +233,11 @@ export class AppComponent implements OnInit {
   }
 
   submitRawJson(): void {
+    if (!this.isAdmin) {
+      this.errorMessage = 'Solo el rol admin puede crear recetas.';
+      return;
+    }
+
     let payload: any;
     try {
       payload = JSON.parse(this.rawJson);
@@ -186,6 +266,11 @@ export class AppComponent implements OnInit {
 
   // Construye el objeto desde el formulario amigable y lo envía
   submitSimpleForm(): void {
+    if (!this.isAdmin) {
+      this.errorMessage = 'Solo el rol admin puede crear recetas.';
+      return;
+    }
+
     if (!this.simpleTitle || this.simpleTitle.trim() === '') {
       this.errorMessage = 'El título es obligatorio.';
       return;
@@ -251,6 +336,11 @@ export class AppComponent implements OnInit {
 
   // Métodos de edición
   startEditing(recipe: Recipe): void {
+    if (!this.isAdmin) {
+      this.errorMessage = 'Solo el rol admin puede editar recetas.';
+      return;
+    }
+
     this.editingRecipeId = recipe._id || recipe.id || null;
     this.editTitle = recipe.title;
     this.editIngredients = recipe.ingredients.join('\n');
@@ -274,6 +364,11 @@ export class AppComponent implements OnInit {
   }
 
   submitEditForm(): void {
+    if (!this.isAdmin) {
+      this.errorMessage = 'Solo el rol admin puede editar recetas.';
+      return;
+    }
+
     if (!this.editTitle || this.editTitle.trim() === '') {
       this.errorMessage = 'El título es obligatorio.';
       return;
@@ -325,12 +420,21 @@ export class AppComponent implements OnInit {
       error: (err) => {
         console.error('Error al actualizar receta:', err);
         this.submittingEdit = false;
-        this.errorMessage = 'Error al actualizar la receta (ver consola).';
+        if (err.status === 403) {
+          this.errorMessage = 'Permiso denegado: solo admin puede actualizar recetas.';
+        } else {
+          this.errorMessage = 'Error al actualizar la receta (ver consola).';
+        }
       }
     });
   }
 
   deleteRecipe(recipe: Recipe): void {
+    if (!this.isAdmin) {
+      this.errorMessage = 'Solo el rol admin puede eliminar recetas.';
+      return;
+    }
+
     const recipeId = recipe._id || recipe.id;
     if (!recipeId) {
       this.errorMessage = 'ID de receta no encontrado.';
@@ -356,7 +460,11 @@ export class AppComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al eliminar receta:', err);
-        this.errorMessage = 'Error al eliminar la receta (ver consola).';
+        if (err.status === 403) {
+          this.errorMessage = 'Permiso denegado: solo admin puede eliminar recetas.';
+        } else {
+          this.errorMessage = 'Error al eliminar la receta (ver consola).';
+        }
       }
     });
   }

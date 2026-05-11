@@ -16,19 +16,25 @@ const {
     updateRecipe,
     deleteRecipe
 } = require('../controllers/recipeController');
+const { login, refresh, logout } = require('../controllers/authController');
+const { authenticateToken, requireRole } = require('../middlewares/auth');
 
 const { createRawRecipe } = require('../controllers/recipeController');
 
+router.post('/auth/login', login);
+router.post('/auth/refresh', refresh);
+router.post('/auth/logout', logout);
+
 router.route('/recipes')
-    .get(getRecipes)
-    .post(createRecipe);
+    .get(authenticateToken, getRecipes)
+    .post(authenticateToken, requireRole('admin'), createRecipe);
 
 // Ruta para insertar recetas sin validaciones (acepta JSON libre)
-router.post('/recipes/raw', createRawRecipe);
+router.post('/recipes/raw', authenticateToken, requireRole('admin'), createRawRecipe);
 
 router.route('/recipes/:id')
-    .get(getRecipeById)
-    .put(updateRecipe)
-    .delete(deleteRecipe);
+    .get(authenticateToken, getRecipeById)
+    .put(authenticateToken, requireRole('admin'), updateRecipe)
+    .delete(authenticateToken, requireRole('admin'), deleteRecipe);
 
 module.exports = router;

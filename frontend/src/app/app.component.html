@@ -3,6 +3,41 @@
     <div>
       <p class="eyebrow">SweetLab</p>
       <h2>Laboratorio de ensayo de tus recetas</h2>
+
+      <div class="auth-buttons">
+        <input
+          type="text"
+          class="auth-input"
+          [(ngModel)]="loginUsername"
+          name="loginUsername"
+          placeholder="Usuario"
+          [disabled]="loading"
+        />
+        <input
+          type="password"
+          class="auth-input"
+          [(ngModel)]="loginPassword"
+          name="loginPassword"
+          placeholder="Contraseña"
+          [disabled]="loading"
+        />
+        <button type="button" class="btn-auth btn-admin" (click)="loginAs('admin')" [disabled]="loading || userRole === 'admin'">
+          Entrar como Admin
+        </button>
+        <button type="button" class="btn-auth btn-external" (click)="loginAs('externo')" [disabled]="loading || userRole === 'externo'">
+          Entrar como Usuario externo
+        </button>
+        <button *ngIf="isAuthenticated" type="button" class="btn-auth btn-logout" (click)="logout()">
+          Cerrar sesión
+        </button>
+      </div>
+
+      <p *ngIf="isAuthenticated" class="role-badge">
+        Rol actual: <strong>{{ userRole }}</strong>
+      </p>
+      <p class="auth-help">
+        Credenciales por defecto: admin/admin123 (admin) y externo/externo123 (externo).
+      </p>
     </div>
 
     <label class="search-box">
@@ -34,10 +69,13 @@
   <section class="content-grid">
     <div class="recipe-list" aria-label="Listado de recetas">
       <div class="controls">
-        <button type="button" class="btn-primary" (click)="toggleJsonEditor()">Añadir receta</button>
+        <button *ngIf="isAdmin" type="button" class="btn-primary" (click)="toggleJsonEditor()">Añadir receta</button>
+        <p *ngIf="isAuthenticated && !isAdmin" class="readonly-note">
+          Modo lectura: con rol externo solo puedes consultar recetas.
+        </p>
       </div>
 
-      <div *ngIf="showJsonEditor" class="editor-shell">
+      <div *ngIf="showJsonEditor && isAdmin" class="editor-shell">
         <div class="editor-tabs">
 
           <button type="button" class="close-btn" (click)="toggleJsonEditor()">Cerrar</button>
@@ -142,7 +180,7 @@
           </ol>
         </div>
 
-          <div class="detail-actions">
+          <div class="detail-actions" *ngIf="isAdmin">
             <button type="button" class="btn-edit" (click)="startEditing(recipe)">✏️ Editar</button>
             <button type="button" class="btn-delete" (click)="deleteRecipe(recipe)">🗑️ Eliminar</button>
           </div>

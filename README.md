@@ -5,9 +5,9 @@ Proyecto de practica para aprender desarrollo web con:
 - Backend con Node.js + Express + MongoDB (API REST de recetas)
 - Frontend con Angular (interfaz para mostrar recetas)
 
-**🚀 Sitio (GitHub Pages):** [https://MirelSIG.github.io/SweetLab/](https://MirelSIG.github.io/SweetLab/)
+** Sitio (GitHub Pages):** [https://MirelSIG.github.io/SweetLab/](https://MirelSIG.github.io/SweetLab/)
 
-**💻 Desarrollo local:** Arranca el frontend y abre en el navegador: [http://localhost:4200](http://localhost:4200)
+** Desarrollo local:** Arranca el frontend y abre en el navegador: [http://localhost:4200](http://localhost:4200)
 
 Para iniciar localmente:
 
@@ -90,6 +90,25 @@ node src/server.js
 
 Si todo va bien, deberias ver mensajes de conexion a MongoDB y servidor en puerto 4000.
 
+### Tests del backend
+
+Para ejecutar los tests automatizados de autenticacion:
+
+```bash
+cd backend
+npm install
+npm test
+```
+
+Para ver el reporte de cobertura de código:
+
+```bash
+cd backend
+npm run test:cov
+```
+
+Esto genera un reporte HTML en `coverage/lcov-report/index.html` que puedes abrir en el navegador.
+
 ## 5) Como ejecutar el frontend Angular
 
 Desde otra terminal, en la carpeta frontend:
@@ -110,8 +129,64 @@ Base URL local:
 http://localhost:4000/api
 ```
 
+### Autenticación (JWT con rol + credenciales)
+
+Antes de usar rutas de recetas, inicia sesión en:
+
+- POST /auth/login
+
+Body esperado:
+
+```json
+{
+    "role": "admin",
+    "username": "admin",
+    "password": "admin123"
+}
+```
+
+Credenciales por defecto (desarrollo):
+
+- admin: username `admin`, password `admin123`
+- externo: username `externo`, password `externo123`
+
+Permisos:
+
+- admin: lectura + crear + editar + eliminar
+- externo: solo lectura
+
+Puedes cambiar credenciales desde variables de entorno del backend:
+
+- `ADMIN_USERNAME`
+- `ADMIN_PASSWORD`
+- `EXTERNAL_USERNAME`
+- `EXTERNAL_PASSWORD`
+- `JWT_SECRET`
+- `JWT_EXPIRES_IN`
+- `JWT_REFRESH_SECRET`
+- `JWT_REFRESH_EXPIRES_IN`
+- `MAX_LOGIN_ATTEMPTS`
+- `LOCK_TIME_MINUTES`
+
+Seed de usuarios en MongoDB (recomendado al iniciar):
+
+```bash
+cd backend
+npm install
+npm run seed:users
+```
+
+El login devuelve `token` (acceso) y `refreshToken` (renovación).
+
+Si expira el access token, el frontend intenta renovar automáticamente con `POST /auth/refresh`.
+
+Tras varios intentos de login fallidos, el backend aplica bloqueo temporal por identidad (usuario + IP).
+
 Rutas:
 
+- POST /auth/login
+- POST /auth/refresh
+- POST /auth/logout
 - GET /recipes
     Lista todas las recetas.
 - GET /recipes/:id
