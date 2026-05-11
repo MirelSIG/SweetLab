@@ -19,6 +19,16 @@ npm start
 
 Nota: el despliegue a GitHub Pages puede tardar 1-2 minutos tras ejecutar el workflow.
 
+## Despliegue en Producción (Frontend + Backend)
+
+Para que la aplicación funcione completamente desde GitHub Pages sin backend local, necesitas:
+
+1. Desplegar el backend en Render (gratuito)
+2. Configurar MongoDB Atlas (gratuito)
+3. Actualizar la URL del backend en el frontend
+
+Ver instrucciones completas en: [docs/deploy-render.md](docs/deploy-render.md)
+
 Esta guia esta escrita para una persona que empieza en programacion web y tambien empieza con Angular.
 
 ## 1) Que hace este proyecto

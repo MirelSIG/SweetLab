@@ -122,7 +122,7 @@ Versionado y compatibilidad
 - Esta especificación describe la API expuesta en `main` (sin versionado). Para cambios incompatibles, introducir prefijo `/v1/` y registrar cambios en el `CHANGELOG`.
 
 Contacto y mantenimiento
-- Responsable: equipo SweetLab
+- Responsable: autora SweetLab
 - Issues / PRs: gestionar en el repositorio GitHub del proyecto.
 
 Archivos relacionados

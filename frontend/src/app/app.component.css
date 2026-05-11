@@ -84,6 +84,24 @@ h2 {
   background: #6b7280;
 }
 
+.btn-register {
+  background: linear-gradient(180deg, #fb923c, #f97316);
+  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.25);
+}
+
+.btn-register:hover {
+  transform: translateY(-2px);
+}
+
+.btn-login {
+  background: linear-gradient(180deg, #3b82f6, #2563eb);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
+}
+
+.btn-login:hover {
+  transform: translateY(-2px);
+}
+
 .role-badge {
   margin: 12px 0 0;
   color: #374151;

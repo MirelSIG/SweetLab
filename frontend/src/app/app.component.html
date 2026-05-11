@@ -21,11 +21,11 @@
           placeholder="Contraseña"
           [disabled]="loading"
         />
-        <button type="button" class="btn-auth btn-admin" (click)="loginAs('admin')" [disabled]="loading || userRole === 'admin'">
-          Entrar como Admin
+        <button type="button" class="btn-auth btn-register" (click)="registerAs()" [disabled]="loading || isAuthenticated">
+          REGISTRARTE
         </button>
-        <button type="button" class="btn-auth btn-external" (click)="loginAs('externo')" [disabled]="loading || userRole === 'externo'">
-          Entrar como Usuario externo
+        <button type="button" class="btn-auth btn-login" (click)="loginAs()" [disabled]="loading || isAuthenticated">
+          INGRESAR
         </button>
         <button *ngIf="isAuthenticated" type="button" class="btn-auth btn-logout" (click)="logout()">
           Cerrar sesión

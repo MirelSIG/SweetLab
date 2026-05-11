@@ -20,8 +20,12 @@ export class RecipeService {
   private readonly refreshTokenStorageKey = 'sweetlabRefreshToken';
   private readonly roleStorageKey = 'sweetlabUserRole';
 
-  login(role: 'admin' | 'externo', username: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiBaseUrl}/auth/login`, { role, username, password });
+  login(username: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiBaseUrl}/auth/login`, { username, password });
+  }
+
+  register(username: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiBaseUrl}/auth/register`, { username, password });
   }
 
   setSession(token: string, refreshToken: string, role: 'admin' | 'externo'): void {

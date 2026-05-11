@@ -81,12 +81,46 @@ const storeRefreshToken = async (userId, refreshToken) => {
   await user.save();
 };
 
-exports.login = async (req, res) => {
-  const { role, username, password } = req.body || {};
+exports.register = async (req, res) => {
+  // Ahora el registro por defecto crea usuarios con rol 'externo'.
+  const { role: requestedRole, username, password } = req.body || {};
 
-  if (!role || !allowedRoles.includes(role)) {
-    return res.status(400).json({ message: 'Rol invalido. Usa "admin" o "externo".' });
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Usuario y contraseña son obligatorios.' });
   }
+
+  // Si se solicita crear admin, solo permitir si se habilita explícitamente.
+  const role = requestedRole && allowedRoles.includes(requestedRole) ? requestedRole : 'externo';
+  if (role === 'admin' && process.env.ALLOW_ADMIN_REGISTRATION !== 'true') {
+    return res.status(403).json({ message: 'Registro de admin no permitido.' });
+  }
+
+  try {
+    const existing = await User.findOne({ username });
+    if (existing) {
+      return res.status(409).json({ message: 'El nombre de usuario ya existe.' });
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+    const user = await User.create({ username, passwordHash, role, refreshTokens: [] });
+
+    const token = buildAccessToken({ role: user.role, username: user.username });
+    const refreshToken = buildRefreshToken({
+      userId: user._id.toString(),
+      role: user.role,
+      username: user.username
+    });
+
+    await storeRefreshToken(user._id, refreshToken);
+
+    return res.status(201).json({ token, refreshToken, role: user.role, expiresIn: ACCESS_TOKEN_EXPIRES_IN });
+  } catch (error) {
+    return res.status(500).json({ message: 'Error al registrar usuario.' });
+  }
+};
+
+exports.login = async (req, res) => {
+  const { username, password } = req.body || {};
 
   if (!username || !password) {
     return res.status(400).json({ message: 'Usuario y contraseña son obligatorios.' });
@@ -101,17 +135,18 @@ exports.login = async (req, res) => {
   }
 
   try {
-    const user = await User.findOne({ username, role });
+    // Buscar por username y usar el rol almacenado en el documento de usuario.
+    const user = await User.findOne({ username });
 
     if (!user) {
       registerFailedAttempt(identityKey);
-      return res.status(401).json({ message: 'Credenciales invalidas para el rol indicado.' });
+      return res.status(401).json({ message: 'Credenciales invalidas.' });
     }
 
     const isValidPassword = await bcrypt.compare(password, user.passwordHash);
     if (!isValidPassword) {
       registerFailedAttempt(identityKey);
-      return res.status(401).json({ message: 'Credenciales invalidas para el rol indicado.' });
+      return res.status(401).json({ message: 'Credenciales invalidas.' });
     }
 
     clearFailedAttempts(identityKey);

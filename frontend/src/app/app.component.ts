@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    this.errorMessage = 'Selecciona un rol para iniciar sesión: Admin o Usuario externo.';
+    this.errorMessage = 'Ingresa usuario y contraseña para iniciar sesión o registrarte.';
   }
 
   get isAuthenticated(): boolean {
@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
     return this.userRole === 'admin';
   }
 
-  loginAs(role: 'admin' | 'externo'): void {
+  loginAs(): void {
     if (!this.loginUsername.trim() || !this.loginPassword.trim()) {
       this.errorMessage = 'Ingresa usuario y contraseña para iniciar sesión.';
       return;
@@ -55,22 +55,57 @@ export class AppComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    this.recipeService.login(role, this.loginUsername.trim(), this.loginPassword).subscribe({
+    this.recipeService.login(this.loginUsername.trim(), this.loginPassword).subscribe({
       next: ({ token, refreshToken, role: loggedRole }) => {
         this.recipeService.setSession(token, refreshToken, loggedRole);
         this.userRole = loggedRole;
         this.successMessage = `Sesión iniciada como ${loggedRole}.`;
+        this.loginUsername = '';
+        this.loginPassword = '';
         this.loadRecipes();
       },
       error: (error: HttpErrorResponse) => {
         console.error('Error al iniciar sesión:', error);
         this.loading = false;
         if (error.status === 401) {
-          this.errorMessage = 'Usuario o contraseña incorrectos para ese rol.';
+          this.errorMessage = 'Usuario o contraseña incorrectos.';
         } else if (error.status === 429) {
           this.errorMessage = error.error?.message || 'Demasiados intentos fallidos. Intenta más tarde.';
         } else {
           this.errorMessage = 'No se pudo iniciar sesión. Verifica que el backend esté corriendo.';
+        }
+      }
+    });
+  }
+
+  registerAs(): void {
+    if (!this.loginUsername.trim() || !this.loginPassword.trim()) {
+      this.errorMessage = 'Ingresa usuario y contraseña para registrarte.';
+      return;
+    }
+
+    this.loading = true;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    this.recipeService.register(this.loginUsername.trim(), this.loginPassword).subscribe({
+      next: ({ token, refreshToken, role: regRole }) => {
+        this.recipeService.setSession(token, refreshToken, regRole);
+        this.userRole = regRole;
+        this.successMessage = `Usuario registrado e ingresado como ${regRole}.`;
+        this.loginUsername = '';
+        this.loginPassword = '';
+        this.loadRecipes();
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error al registrar:', error);
+        this.loading = false;
+        if (error.status === 409) {
+          this.errorMessage = 'El nombre de usuario ya existe.';
+        } else if (error.status === 403) {
+          this.errorMessage = error.error?.message || 'Registro no permitido.';
+        } else {
+          this.errorMessage = 'No se pudo registrar. Verifica que el backend esté corriendo.';
         }
       }
     });
@@ -86,6 +121,8 @@ export class AppComponent implements OnInit {
     this.loading = false;
     this.successMessage = 'Sesión cerrada.';
     this.errorMessage = 'Selecciona un rol para iniciar sesión: Admin o Usuario externo.';
+    this.loginUsername = '';
+    this.loginPassword = '';
   }
 
   private loadRecipes(): void {

@@ -16,12 +16,13 @@ const {
     updateRecipe,
     deleteRecipe
 } = require('../controllers/recipeController');
-const { login, refresh, logout } = require('../controllers/authController');
+const { login, refresh, logout, register } = require('../controllers/authController');
 const { authenticateToken, requireRole } = require('../middlewares/auth');
 
 const { createRawRecipe } = require('../controllers/recipeController');
 
 router.post('/auth/login', login);
+router.post('/auth/register', register);
 router.post('/auth/refresh', refresh);
 router.post('/auth/logout', logout);
 
