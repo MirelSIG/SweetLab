@@ -14,8 +14,8 @@ export interface LoginResponse {
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
   private readonly http = inject(HttpClient);
-  private readonly apiBaseUrl = 'http://localhost:4000/api';
-  private readonly apiUrl = `${this.apiBaseUrl}/recipes`;
+  private readonly apiBaseUrl = 'https://sweetlab-2.onrender.com';
+  private readonly apiUrl = 'https://sweetlab-2.onrender.com/recipes';
   private readonly tokenStorageKey = 'sweetlabAuthToken';
   private readonly refreshTokenStorageKey = 'sweetlabRefreshToken';
   private readonly roleStorageKey = 'sweetlabUserRole';
