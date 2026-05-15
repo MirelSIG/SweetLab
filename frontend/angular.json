@@ -29,7 +29,7 @@
           },
           "configurations": {
             "production": {
-              "baseHref": "/SweetLab/",
+              "baseHref": "/",
               "budgets": [
                 {
                   "type": "initial",
