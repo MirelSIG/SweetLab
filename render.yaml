@@ -3,24 +3,7 @@ services:
     name: sweetlab-backend
     env: node
     plan: free
-    buildCommand: cd backend && npm install
-    startCommand: cd backend && node src/server.js
-    envVars:
-      - key: MONGO_URI
-        fromDatabase: false
-        value: ""
-      - key: JWT_SECRET
-        fromDatabase: false
-        value: ""
-      - key: JWT_REFRESH_SECRET
-        fromDatabase: false
-        value: ""
-services:
-  - type: web
-    name: sweetlab-backend
-    runtime: node
-    plan: free
-    buildCommand: cd backend && npm install
+    buildCommand: cd frontend && npm install && npm run build:prod && cd ../backend && npm install
     startCommand: cd backend && node src/server.js
     envVars:
       - key: MONGO_URI
