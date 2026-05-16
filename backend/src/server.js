@@ -13,11 +13,17 @@ if (!MONGO_URI) {
   throw new Error('MONGO_URI no esta definido en el archivo .env del backend');
 }
 
+console.log('=== SweetLab Server Startup ===');
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('process.cwd():', process.cwd());
+
 mongoose.connect(MONGO_URI)
   .then(() => {
     console.log('Conectado a MongoDB');
     app.listen(PORT, () => {
-      console.log(`Servidor corriendo en http://localhost:${PORT}`);
+      console.log(`\n✓ Servidor corriendo en http://localhost:${PORT}`);
+      console.log('✓ API disponible en /api');
+      console.log('✓ Frontend disponible en /\n');
     });
   })
   .catch((err) => {

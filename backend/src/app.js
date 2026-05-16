@@ -7,12 +7,30 @@ const recipeRoutes = require('./routes/recipeRoutes');
 const app = express();
 
 const frontendBuildCandidates = [
+	path.resolve(process.cwd(), '../frontend/dist/sweetlab-frontend/browser'),
+	path.resolve(process.cwd(), '../frontend/dist/sweetlab-frontend'),
+	path.resolve(process.cwd(), 'frontend/dist/sweetlab-frontend/browser'),
+	path.resolve(process.cwd(), 'frontend/dist/sweetlab-frontend'),
 	path.resolve(__dirname, '../../frontend/dist/sweetlab-frontend/browser'),
 	path.resolve(__dirname, '../../frontend/dist/sweetlab-frontend')
 ];
 
-const frontendBuildDir = frontendBuildCandidates.find((candidate) => fs.existsSync(candidate));
-const frontendIndexHtml = frontendBuildDir ? path.join(frontendBuildDir, 'index.html') : null;
+let frontendBuildDir = null;
+let frontendIndexHtml = null;
+
+for (const candidate of frontendBuildCandidates) {
+	if (fs.existsSync(candidate)) {
+		frontendBuildDir = candidate;
+		frontendIndexHtml = path.join(frontendBuildDir, 'index.html');
+		console.log('Frontend build found at:', frontendBuildDir);
+		break;
+	}
+}
+
+if (!frontendBuildDir) {
+	console.warn('WARNING: Frontend build not found at any candidate path. Frontend will not be served.');
+	console.warn('Candidates checked:', frontendBuildCandidates);
+}
 
 // Middleware para permitir peticiones desde el frontend
 app.use(cors());
@@ -24,14 +42,20 @@ app.use(express.json());
 app.use('/api', recipeRoutes);
 
 if (frontendBuildDir) {
+	// Servir archivos estáticos del frontend
 	app.use(express.static(frontendBuildDir));
 
-	app.get(/^\/(?!api).*/, (req, res, next) => {
+	// Fallback SPA: para rutas que no son API ni archivos estáticos, servir index.html
+	app.get('*', (req, res) => {
 		if (!frontendIndexHtml) {
-			return next();
+			return res.status(404).send('Frontend not available');
 		}
-
-		return res.sendFile(frontendIndexHtml);
+		res.sendFile(frontendIndexHtml);
+	});
+} else {
+	// Si no hay frontend, retornar error en cualquier ruta que no sea API
+	app.get('*', (req, res) => {
+		res.status(404).json({ error: 'Frontend build not found' });
 	});
 }
 

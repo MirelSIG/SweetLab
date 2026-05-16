@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: sweetlab-backend
+    name: sweetlab
     env: node
     plan: free
-    buildCommand: cd frontend && npm install && npm run build:prod && cd ../backend && npm install
+    buildCommand: cd frontend && npm install && npm run build:prod && cd ../backend && npm install && echo "Build completed successfully"
     startCommand: cd backend && node src/server.js
     envVars:
       - key: MONGO_URI
