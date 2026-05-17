@@ -1,0 +1,19 @@
+services:
+  sweetlab:
+    image: node:20-alpine
+    container_name: sweetlab-app
+    working_dir: /workspace
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./backend/.env
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+    volumes:
+      - ./:/workspace
+    command: >
+      sh -lc "
+      cd frontend && npm ci --include=dev && npm run build:prod &&
+      cd ../backend && npm ci && node src/server.js
+      "
