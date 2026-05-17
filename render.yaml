@@ -10,6 +10,6 @@ services:
         value: ${MONGO_URI}
         scope: build,runtime
       - key: NODE_ENV
-        value: production
+        value: ${NODE_ENV}
       - key: PORT
         value: 4000
