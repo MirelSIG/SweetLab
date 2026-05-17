@@ -7,8 +7,9 @@ services:
     startCommand: cd backend && node src/server.js
     envVars:
       - key: MONGO_URI
+        value: ${MONGO_URI}
         scope: build,runtime
       - key: NODE_ENV
-        value: ${MONGO_URI}
+        value: production
       - key: PORT
         value: 4000
