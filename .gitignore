@@ -17,3 +17,4 @@ frontend/.angular/
 # Build outputs
 frontend/dist
 backend/dist
+render.yaml
