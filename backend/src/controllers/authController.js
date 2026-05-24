@@ -8,10 +8,19 @@ const REFRESH_TOKEN_SECRET = process.env.JWT_REFRESH_SECRET || 'sweetlab-dev-ref
 const REFRESH_TOKEN_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
 const MAX_LOGIN_ATTEMPTS = Number(process.env.MAX_LOGIN_ATTEMPTS || 5);
 const LOCK_TIME_MINUTES = Number(process.env.LOCK_TIME_MINUTES || 15);
+const PASSWORD_RULES_MESSAGE = 'La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula y un número.';
 
 const failedAttemptsByIdentity = new Map();
 
 const allowedRoles = ['admin', 'externo'];
+
+const isPasswordFormatValid = (password) => (
+  typeof password === 'string'
+  && password.length >= 8
+  && /[a-z]/.test(password)
+  && /[A-Z]/.test(password)
+  && /\d/.test(password)
+);
 
 const getIdentityKey = (req, username) => {
   const ip = req.ip || req.connection?.remoteAddress || 'unknown-ip';
@@ -87,6 +96,10 @@ exports.register = async (req, res) => {
 
   if (!username || !password) {
     return res.status(400).json({ message: 'Usuario y contraseña son obligatorios.' });
+  }
+
+  if (!isPasswordFormatValid(password)) {
+    return res.status(400).json({ message: PASSWORD_RULES_MESSAGE });
   }
 
   // Si se solicita crear admin, solo permitir si se habilita explícitamente.

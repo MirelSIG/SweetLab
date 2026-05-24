@@ -20,6 +20,14 @@ const validateRecipePayload = (body, { requireAllFields = false } = {}) => {
     return 'El campo "title" debe ser un texto no vacio.';
   }
 
+  if ('imageUrl' in body && (typeof body.imageUrl !== 'string' || body.imageUrl.trim() === '')) {
+    return 'El campo "imageUrl" debe ser un texto valido.';
+  }
+
+  if ('imageName' in body && (typeof body.imageName !== 'string' || body.imageName.trim() === '')) {
+    return 'El campo "imageName" debe ser un texto valido.';
+  }
+
   if ('ingredients' in body) {
     if (
       !Array.isArray(body.ingredients) ||

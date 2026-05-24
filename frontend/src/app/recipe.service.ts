@@ -19,6 +19,7 @@ export class RecipeService {
   private readonly tokenStorageKey = 'sweetlabAuthToken';
   private readonly refreshTokenStorageKey = 'sweetlabRefreshToken';
   private readonly roleStorageKey = 'sweetlabUserRole';
+  private readonly usernameStorageKey = 'sweetlabUsername';
 
   login(username: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiBaseUrl}/auth/login`, { username, password });
@@ -28,10 +29,13 @@ export class RecipeService {
     return this.http.post<LoginResponse>(`${this.apiBaseUrl}/auth/register`, { username, password });
   }
 
-  setSession(token: string, refreshToken: string, role: 'admin' | 'externo'): void {
+  setSession(token: string, refreshToken: string, role: 'admin' | 'externo', username?: string): void {
     localStorage.setItem(this.tokenStorageKey, token);
     localStorage.setItem(this.refreshTokenStorageKey, refreshToken);
     localStorage.setItem(this.roleStorageKey, role);
+    if (username) {
+      localStorage.setItem(this.usernameStorageKey, username);
+    }
   }
 
   clearSession(logoutOnServer = false): void {
@@ -52,6 +56,7 @@ export class RecipeService {
     localStorage.removeItem(this.tokenStorageKey);
     localStorage.removeItem(this.refreshTokenStorageKey);
     localStorage.removeItem(this.roleStorageKey);
+    localStorage.removeItem(this.usernameStorageKey);
   }
 
   getStoredToken(): string {
@@ -65,6 +70,10 @@ export class RecipeService {
   getStoredRole(): 'admin' | 'externo' | null {
     const role = localStorage.getItem(this.roleStorageKey);
     return role === 'admin' || role === 'externo' ? role : null;
+  }
+
+  getStoredUsername(): string {
+    return localStorage.getItem(this.usernameStorageKey) || '';
   }
 
   private authOptions(): { headers: HttpHeaders } {
@@ -92,7 +101,7 @@ export class RecipeService {
 
         return this.refreshAccessToken().pipe(
           switchMap((refreshResponse) => {
-            this.setSession(refreshResponse.token, refreshResponse.refreshToken, refreshResponse.role);
+            this.setSession(refreshResponse.token, refreshResponse.refreshToken, refreshResponse.role, this.getStoredUsername());
             return requestFactory();
           }),
           catchError((refreshError) => {

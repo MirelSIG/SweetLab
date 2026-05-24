@@ -1,8 +1,29 @@
 <main class="page-shell">
+  <header class="topbar">
+    <div class="brand-lockup">
+      <div class="brand-mark">SL</div>
+      <div>
+        <p class="eyebrow">SweetLab</p>
+        <h1>Laboratorio de ensayo de recetas</h1>
+      </div>
+    </div>
+
+    <div class="session-card" [class.session-card--active]="isAuthenticated">
+      <span class="session-card__label">{{ isAuthenticated ? 'Usuario activo' : 'Acceso' }}</span>
+      <strong>{{ isAuthenticated ? currentUserName : 'Invitado' }}</strong>
+      <small *ngIf="isAuthenticated">Ya estás registrado y puedes continuar como {{ userRole }}.</small>
+      <small *ngIf="!isAuthenticated">Inicia sesión o registra tu usuario.</small>
+    </div>
+  </header>
+
   <section class="hero">
-    <div>
-      <p class="eyebrow">SweetLab</p>
-      <h2>Laboratorio de ensayo de recetas de Mailisol</h2>
+    <div class="hero-copy">
+      <p class="hero-kicker">Recetas, edición y experimentación</p>
+      <h2>Explora, registra y mejora recetas con una interfaz más clara.</h2>
+      <p class="hero-text">
+        Guarda tus recetas, adjunta imágenes desde <span>./assets</span> o desde un archivo local,
+        y continúa trabajando sin perder la sesión activa.
+      </p>
 
       <div class="auth-buttons">
         <input
@@ -18,7 +39,7 @@
           class="auth-input"
           [(ngModel)]="loginPassword"
           name="loginPassword"
-          placeholder="Contraseña"
+          placeholder="Mín. 8 caracteres, 1 mayúscula, 1 minúscula y 1 número"
           [disabled]="loading"
         />
         <button type="button" class="btn-auth btn-register" (click)="registerAs()" [disabled]="loading || isAuthenticated">
@@ -32,12 +53,35 @@
         </button>
       </div>
 
+      <p *ngIf="sessionBanner" class="session-banner">{{ sessionBanner }}</p>
       <p *ngIf="isAuthenticated" class="role-badge">
         Rol actual: <strong>{{ userRole }}</strong>
       </p>
-      <p class="auth-help">
-        Credenciales por defecto: admin/admin123 (admin) y externo/externo123 (externo).
-      </p>
+      <p class="password-hint">La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula y un número.</p>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <figure class="hero-visual__tile hero-visual__tile--large">
+        <img
+          src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80"
+          alt=""
+          loading="lazy"
+        />
+      </figure>
+      <figure class="hero-visual__tile hero-visual__tile--tall">
+        <img
+          src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80"
+          alt=""
+          loading="lazy"
+        />
+      </figure>
+      <figure class="hero-visual__tile hero-visual__tile--wide">
+        <img
+          src="https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=900&q=80"
+          alt=""
+          loading="lazy"
+        />
+      </figure>
     </div>
 
     <label class="search-box">
@@ -47,7 +91,7 @@
         [value]="searchTerm"
         (input)="onSearch($event)"
         placeholder="Tarta, sopa, chocolate..."
-      >
+      />
     </label>
   </section>
 
@@ -77,22 +121,22 @@
 
       <div *ngIf="showJsonEditor && isAdmin" class="editor-shell">
         <div class="editor-tabs">
-
+          <button type="button" [class.active]="editorMode === 'form'" (click)="editorMode = 'form'">Formulario</button>
+          <button type="button" [class.active]="editorMode === 'json'" (click)="editorMode = 'json'">JSON</button>
           <button type="button" class="close-btn" (click)="toggleJsonEditor()">Cerrar</button>
         </div>
 
-        <!-- Formulario amigable -->
         <form *ngIf="editorMode === 'form'" (ngSubmit)="submitSimpleForm()" class="simple-form">
           <label>Nombre de tu receta</label>
           <input type="text" [(ngModel)]="simpleTitle" (ngModelChange)="saveDraft()" name="title" required />
 
-          <label>Ingredientes (Ingresa una por línea o separadas por comas)</label>
+          <label>Ingredientes (ingresa uno por línea o separados por comas)</label>
           <textarea [(ngModel)]="simpleIngredients" (ngModelChange)="saveDraft()" name="ingredients" rows="4"></textarea>
 
-          <label>Pasos (Escribe cada paso en una línea)</label>
+          <label>Pasos (escribe cada paso en una línea)</label>
           <textarea [(ngModel)]="simpleSteps" (ngModelChange)="saveDraft()" name="steps" rows="6"></textarea>
 
-          <label>Tags (Usa # y separa con comas)</label>
+          <label>Tags (separa con comas)</label>
           <input type="text" [(ngModel)]="simpleTags" (ngModelChange)="saveDraft()" name="tags" placeholder="Ej.: #postre, #rápido, #fácil" />
 
           <label>Tiempo de elaboración (minutos)</label>
@@ -106,16 +150,35 @@
             <option value="Alta">Alta</option>
           </select>
 
+          <label>Imagen de la receta</label>
+          <input
+            type="text"
+            [(ngModel)]="simpleImagePath"
+            (ngModelChange)="saveDraft()"
+            name="imagePath"
+            placeholder="assets/mi-receta.jpg o una URL de imagen"
+          />
+          <div class="image-upload-row">
+            <input #createImageInput type="file" accept="image/*" class="file-input" (change)="onSimpleImageSelected($event)" />
+            <button type="button" (click)="createImageInput.click()">Adjuntar imagen</button>
+            <button type="button" *ngIf="simpleImagePath || simpleImagePreview" class="secondary-action" (click)="clearSimpleImage()">
+              Limpiar imagen
+            </button>
+          </div>
+          <div *ngIf="simpleImagePath || simpleImagePreview" class="image-preview">
+            <img [src]="getCreateRecipeImage()" alt="Vista previa de la receta" loading="lazy" />
+            <p *ngIf="simpleImageFileName">Archivo seleccionado: {{ simpleImageFileName }}</p>
+          </div>
+
           <div class="form-actions">
             <button type="submit" [disabled]="submittingRaw">Guardar receta</button>
             <button type="button" (click)="resetSimpleForm()">Limpiar</button>
           </div>
         </form>
 
-        <!-- Editor JSON avanzado -->
         <div *ngIf="editorMode === 'json'" class="json-editor">
           <label>JSON de la receta (se enviará tal cual, sin restricciones):</label>
-          <textarea [(ngModel)]="rawJson" rows="10" cols="40"></textarea>
+          <textarea [(ngModel)]="rawJson" name="rawJson" rows="10"></textarea>
           <div class="editor-actions">
             <button type="button" (click)="submitRawJson()" [disabled]="submittingRaw">Enviar JSON</button>
           </div>
@@ -124,6 +187,7 @@
         <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
         <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
       </div>
+
       <div *ngIf="loading" class="info-card">Cargando recetas...</div>
       <div *ngIf="errorMessage" class="info-card error">{{ errorMessage }}</div>
 
@@ -134,6 +198,17 @@
         [class.active]="(selectedRecipe?._id || selectedRecipe?.id) === (recipe._id || recipe.id)"
         (click)="selectRecipe(recipe)"
       >
+        <ng-container *ngIf="getRecipeImage(recipe) as recipeImage; else recipeFallback">
+          <div class="recipe-media">
+            <img [src]="recipeImage" [alt]="recipe.title" title="Imagen de la receta" loading="lazy" />
+          </div>
+        </ng-container>
+        <ng-template #recipeFallback>
+          <div class="recipe-media recipe-media--fallback">
+            <span>SweetLab</span>
+          </div>
+        </ng-template>
+
         <div class="card-top">
           <span *ngIf="recipe.difficulty" class="difficulty">{{ recipe.difficulty }}</span>
           <span *ngIf="recipe.prepTime" class="time">{{ recipe.prepTime }} min</span>
@@ -153,32 +228,43 @@
     </div>
 
     <aside class="detail-panel">
-      <!-- Modo visualización -->
       <div *ngIf="selectedRecipe as recipe">
         <div *ngIf="!isEditingRecipe(recipe)">
           <p class="detail-label">Receta seleccionada</p>
-        <h2>{{ recipe.title }}</h2>
-        <p *ngIf="recipe.description" class="detail-description">{{ recipe.description }}</p>
 
-        <div class="detail-meta" *ngIf="recipe.prepTime || recipe.servings || recipe.difficulty">
-          <span *ngIf="recipe.prepTime">{{ recipe.prepTime }} min</span>
-          <span *ngIf="recipe.servings">{{ recipe.servings }} porciones</span>
-          <span *ngIf="recipe.difficulty">{{ recipe.difficulty }}</span>
-        </div>
+          <ng-container *ngIf="getRecipeImage(recipe) as recipeImage; else detailFallback">
+            <div class="detail-media">
+              <img [src]="recipeImage" [alt]="recipe.title" title="Imagen de la receta" loading="lazy" />
+            </div>
+          </ng-container>
+          <ng-template #detailFallback>
+            <div class="detail-media detail-media--fallback">
+              <span>SweetLab</span>
+            </div>
+          </ng-template>
 
-        <div class="detail-block">
-          <h3>Ingredientes</h3>
-          <ul>
-            <li *ngFor="let ingredient of recipe.ingredients">{{ ingredient }}</li>
-          </ul>
-        </div>
+          <h2>{{ recipe.title }}</h2>
+          <p *ngIf="recipe.description" class="detail-description">{{ recipe.description }}</p>
 
-        <div class="detail-block">
-          <h3>Preparación</h3>
-          <ol>
-            <li *ngFor="let step of recipe.steps">{{ step }}</li>
-          </ol>
-        </div>
+          <div class="detail-meta" *ngIf="recipe.prepTime || recipe.servings || recipe.difficulty">
+            <span *ngIf="recipe.prepTime">{{ recipe.prepTime }} min</span>
+            <span *ngIf="recipe.servings">{{ recipe.servings }} porciones</span>
+            <span *ngIf="recipe.difficulty">{{ recipe.difficulty }}</span>
+          </div>
+
+          <div class="detail-block">
+            <h3>Ingredientes</h3>
+            <ul>
+              <li *ngFor="let ingredient of recipe.ingredients">{{ ingredient }}</li>
+            </ul>
+          </div>
+
+          <div class="detail-block">
+            <h3>Preparación</h3>
+            <ol>
+              <li *ngFor="let step of recipe.steps">{{ step }}</li>
+            </ol>
+          </div>
 
           <div class="detail-actions" *ngIf="isAdmin">
             <button type="button" class="btn-edit" (click)="startEditing(recipe)">✏️ Editar</button>
@@ -186,47 +272,64 @@
           </div>
         </div>
 
-        <!-- Modo edición -->
         <div *ngIf="isEditingRecipe(recipe)" class="edit-form">
-        <p class="detail-label">Editando receta</p>
-        <h2>{{ editTitle }}</h2>
+          <p class="detail-label">Editando receta</p>
+          <h2>{{ editTitle }}</h2>
 
-        <form (ngSubmit)="submitEditForm()" class="simple-form">
-          <label>Nombre de la receta</label>
-          <input type="text" [(ngModel)]="editTitle" name="title" required />
+          <form (ngSubmit)="submitEditForm()" class="simple-form">
+            <label>Nombre de la receta</label>
+            <input type="text" [(ngModel)]="editTitle" name="title" required />
 
-          <label>Ingredientes (Ingresa una por línea o separadas por comas)</label>
-          <textarea [(ngModel)]="editIngredients" name="ingredients" rows="4"></textarea>
+            <label>Ingredientes (ingresa uno por línea o separados por comas)</label>
+            <textarea [(ngModel)]="editIngredients" name="ingredients" rows="4"></textarea>
 
-          <label>Pasos (Escribe cada paso en una línea)</label>
-          <textarea [(ngModel)]="editSteps" name="steps" rows="6"></textarea>
+            <label>Pasos (escribe cada paso en una línea)</label>
+            <textarea [(ngModel)]="editSteps" name="steps" rows="6"></textarea>
 
-          <label>Tags (Usa # y separa con comas)</label>
-          <input type="text" [(ngModel)]="editTags" name="tags" placeholder="Ej.: #postre, #rápido, #fácil" />
+            <label>Tags (separa con comas)</label>
+            <input type="text" [(ngModel)]="editTags" name="tags" placeholder="Ej.: #postre, #rápido, #fácil" />
 
-          <label>Tiempo de elaboración (minutos)</label>
-          <input type="number" min="1" [(ngModel)]="editPrepTime" name="prepTime" placeholder="Ej.: 45" />
+            <label>Tiempo de elaboración (minutos)</label>
+            <input type="number" min="1" [(ngModel)]="editPrepTime" name="prepTime" placeholder="Ej.: 45" />
 
-          <label>Nivel de dificultad</label>
-          <select [(ngModel)]="editDifficulty" name="difficulty">
-            <option value="">Selecciona una opción</option>
-            <option value="Fácil">Fácil</option>
-            <option value="Media">Media</option>
-            <option value="Alta">Alta</option>
-          </select>
+            <label>Nivel de dificultad</label>
+            <select [(ngModel)]="editDifficulty" name="difficulty">
+              <option value="">Selecciona una opción</option>
+              <option value="Fácil">Fácil</option>
+              <option value="Media">Media</option>
+              <option value="Alta">Alta</option>
+            </select>
 
-          <div class="form-actions">
-            <button type="submit" [disabled]="submittingEdit">Guardar cambios</button>
-            <button type="button" (click)="cancelEditing()">Cancelar</button>
-          </div>
-        </form>
+            <label>Imagen de la receta</label>
+            <input
+              type="text"
+              [(ngModel)]="editImagePath"
+              name="editImagePath"
+              placeholder="assets/mi-receta.jpg o una URL de imagen"
+            />
+            <div class="image-upload-row">
+              <input #editImageInput type="file" accept="image/*" class="file-input" (change)="onEditImageSelected($event)" />
+              <button type="button" (click)="editImageInput.click()">Adjuntar imagen</button>
+              <button type="button" *ngIf="editImagePath || editImagePreview" class="secondary-action" (click)="clearEditImage()">
+                Limpiar imagen
+              </button>
+            </div>
+            <div *ngIf="editImagePath || editImagePreview" class="image-preview">
+              <img [src]="getEditRecipeImage()" alt="Vista previa de la receta" loading="lazy" />
+              <p *ngIf="editImageFileName">Archivo seleccionado: {{ editImageFileName }}</p>
+            </div>
 
-        <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
-        <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+            <div class="form-actions">
+              <button type="submit" [disabled]="submittingEdit">Guardar cambios</button>
+              <button type="button" (click)="cancelEditing()">Cancelar</button>
+            </div>
+          </form>
+
+          <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+          <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
         </div>
       </div>
 
-      <!-- Sin selección -->
       <div *ngIf="!selectedRecipe && !editingRecipeId" class="detail-placeholder">
         <p>Selecciona una receta para ver los detalles</p>
       </div>

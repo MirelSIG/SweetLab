@@ -102,6 +102,20 @@ describe('authController', () => {
     expect(persistedUser.refreshTokens).toContain(res.body.refreshToken);
   });
 
+  test('registro rechaza contraseñas que no cumplen el formato', async () => {
+    const { authController, mockUser } = loadAuthController();
+
+    mockUser.findOne.mockResolvedValue(null);
+
+    const req = buildReq({ username: 'nuevo-usuario', password: 'weakpass' });
+    const res = buildRes();
+
+    await authController.register(req, res);
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.message).toContain('mínimo 8 caracteres');
+  });
+
   test('bloquea temporalmente tras exceder intentos fallidos', async () => {
     const { authController, mockUser } = loadAuthController({ maxAttempts: 2 });
 

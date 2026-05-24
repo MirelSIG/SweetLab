@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Recipe } from './recipe.model';
 import { RecipeService } from './recipe.service';
 
@@ -13,28 +13,64 @@ import { RecipeService } from './recipe.service';
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
+  private readonly passwordRulesMessage = 'La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula y un número.';
   recipes: Recipe[] = [];
   selectedRecipe?: Recipe;
   searchTerm = '';
   loading = false;
   errorMessage = '';
+  sessionBanner = '';
   userRole: 'admin' | 'externo' | null = null;
+  currentUserName = '';
   loginUsername = '';
   loginPassword = '';
+
+  showJsonEditor = false;
+  rawJson = '{\n  "title": "Nueva receta libre",\n  "ingredients": ["ingrediente 1"],\n  "steps": ["paso 1"]\n}';
+  submittingRaw = false;
+  editorMode: 'form' | 'json' = 'form';
+
+  simpleTitle = '';
+  simpleIngredients = '';
+  simpleSteps = '';
+  simpleTags = '';
+  simplePrepTime = '';
+  simpleDifficulty: '' | 'Fácil' | 'Media' | 'Alta' = '';
+  simpleImagePath = '';
+  simpleImagePreview = '';
+  simpleImageFileName = '';
+  successMessage = '';
+
+  editingRecipeId: string | null = null;
+  editTitle = '';
+  editIngredients = '';
+  editSteps = '';
+  editTags = '';
+  editPrepTime = '';
+  editDifficulty: '' | 'Fácil' | 'Media' | 'Alta' = '';
+  editImagePath = '';
+  editImagePreview = '';
+  editImageFileName = '';
+  submittingEdit = false;
+
+  private readonly draftKey = 'simpleRecipeDraft';
 
   constructor(private readonly recipeService: RecipeService) {}
 
   ngOnInit(): void {
     const storedToken = this.recipeService.getStoredToken();
     const storedRole = this.recipeService.getStoredRole();
+    const storedUsername = this.recipeService.getStoredUsername();
 
     if (storedToken && storedRole) {
       this.userRole = storedRole;
+      this.currentUserName = storedUsername || storedRole;
+      this.sessionBanner = `Ya estás registrado como ${this.currentUserName} y puedes continuar como ${storedRole}.`;
       this.loadRecipes();
       return;
     }
 
-    this.errorMessage = 'Ingresa usuario y contraseña para iniciar sesión o registrarte.';
+    this.sessionBanner = 'Ingresa usuario y contraseña para iniciar sesión o registrarte.';
   }
 
   get isAuthenticated(): boolean {
@@ -55,10 +91,14 @@ export class AppComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    this.recipeService.login(this.loginUsername.trim(), this.loginPassword).subscribe({
+    const username = this.loginUsername.trim();
+
+    this.recipeService.login(username, this.loginPassword).subscribe({
       next: ({ token, refreshToken, role: loggedRole }) => {
-        this.recipeService.setSession(token, refreshToken, loggedRole);
+        this.recipeService.setSession(token, refreshToken, loggedRole, username);
         this.userRole = loggedRole;
+        this.currentUserName = username;
+        this.sessionBanner = `Ya estás registrado como ${username} y puedes continuar como ${loggedRole}.`;
         this.successMessage = `Sesión iniciada como ${loggedRole}.`;
         this.loginUsername = '';
         this.loginPassword = '';
@@ -84,14 +124,23 @@ export class AppComponent implements OnInit {
       return;
     }
 
+    if (!this.isPasswordFormatValid(this.loginPassword)) {
+      this.errorMessage = this.passwordRulesMessage;
+      return;
+    }
+
     this.loading = true;
     this.errorMessage = '';
     this.successMessage = '';
 
-    this.recipeService.register(this.loginUsername.trim(), this.loginPassword).subscribe({
+    const username = this.loginUsername.trim();
+
+    this.recipeService.register(username, this.loginPassword).subscribe({
       next: ({ token, refreshToken, role: regRole }) => {
-        this.recipeService.setSession(token, refreshToken, regRole);
+        this.recipeService.setSession(token, refreshToken, regRole, username);
         this.userRole = regRole;
+        this.currentUserName = username;
+        this.sessionBanner = `Usuario ${username} registrado e ingresado como ${regRole}.`;
         this.successMessage = `Usuario registrado e ingresado como ${regRole}.`;
         this.loginUsername = '';
         this.loginPassword = '';
@@ -111,9 +160,14 @@ export class AppComponent implements OnInit {
     });
   }
 
+  private isPasswordFormatValid(password: string): boolean {
+    return password.length >= 8 && /[a-z]/.test(password) && /[A-Z]/.test(password) && /\d/.test(password);
+  }
+
   logout(): void {
     this.recipeService.clearSession(true);
     this.userRole = null;
+    this.currentUserName = '';
     this.recipes = [];
     this.selectedRecipe = undefined;
     this.showJsonEditor = false;
@@ -121,6 +175,7 @@ export class AppComponent implements OnInit {
     this.loading = false;
     this.successMessage = 'Sesión cerrada.';
     this.errorMessage = 'Selecciona un rol para iniciar sesión: Admin o Usuario externo.';
+    this.sessionBanner = 'Selecciona un rol para iniciar sesión: Admin o Usuario externo.';
     this.loginUsername = '';
     this.loginPassword = '';
   }
@@ -138,8 +193,10 @@ export class AppComponent implements OnInit {
         console.error('Error al cargar recetas:', error);
         if (error.status === 401) {
           this.errorMessage = 'Tu sesión no es válida o expiró. Inicia sesión de nuevo.';
+          this.sessionBanner = this.errorMessage;
           this.recipeService.clearSession();
           this.userRole = null;
+          this.currentUserName = '';
         } else {
           this.errorMessage = 'No se pudo conectar a la API. Verifica que el backend esté corriendo en http://localhost:4000';
         }
@@ -193,48 +250,88 @@ export class AppComponent implements OnInit {
     return recipe._id || recipe.id || '';
   }
 
-  // --- JSON libre (sin restricciones) ---
-  showJsonEditor = false;
-  rawJson = '{\n  "title": "Nueva receta libre",\n  "ingredients": ["ingrediente 1"],\n  "steps": ["paso 1"]\n}';
-  submittingRaw = false;
-  editorMode: 'form' | 'json' = 'form';
+  getRecipeImage(recipe: Recipe): string {
+    return (recipe.imageUrl || '').trim();
+  }
 
-  // Formulario amigable (no requiere conocimientos de JSON)
-  simpleTitle = '';
-  simpleIngredients = '';
-  simpleSteps = '';
-  simpleTags = '';
-  simplePrepTime = '';
-  simpleDifficulty: '' | 'Fácil' | 'Media' | 'Alta' = '';
-  successMessage = '';
+  getCreateRecipeImage(): string {
+    return (this.simpleImagePreview || this.simpleImagePath || '').trim();
+  }
 
-  // Estado para edición de recetas
-  editingRecipeId: string | null = null;
-  editTitle = '';
-  editIngredients = '';
-  editSteps = '';
-  editTags = '';
-  editPrepTime = '';
-  editDifficulty: '' | 'Fácil' | 'Media' | 'Alta' = '';
-  submittingEdit = false;
+  getEditRecipeImage(): string {
+    return (this.editImagePreview || this.editImagePath || '').trim();
+  }
 
-  toggleJsonEditor(): void {
-    if (!this.isAdmin) {
-      this.errorMessage = 'Solo el rol admin puede crear recetas.';
+  private readImageFile(file: File, target: 'create' | 'edit'): void {
+    if (!file.type.startsWith('image/')) {
+      this.errorMessage = 'Selecciona un archivo de imagen válido.';
       return;
     }
 
-    this.showJsonEditor = !this.showJsonEditor;
-    this.successMessage = '';
-    this.errorMessage = '';
-    if (this.showJsonEditor) {
-      this.loadDraft();
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = typeof reader.result === 'string' ? reader.result : '';
+
+      if (!result) {
+        this.errorMessage = 'No se pudo leer la imagen seleccionada.';
+        return;
+      }
+
+      if (target === 'create') {
+        this.simpleImagePreview = result;
+        this.simpleImageFileName = file.name;
+      } else {
+        this.editImagePreview = result;
+        this.editImageFileName = file.name;
+      }
+
+      this.errorMessage = '';
+    };
+
+    reader.onerror = () => {
+      this.errorMessage = 'No se pudo cargar la imagen seleccionada.';
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  onSimpleImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) {
+      return;
     }
+
+    this.readImageFile(file, 'create');
+    input.value = '';
+  }
+
+  onEditImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    this.readImageFile(file, 'edit');
+    input.value = '';
+  }
+
+  clearSimpleImage(): void {
+    this.simpleImagePath = '';
+    this.simpleImagePreview = '';
+    this.simpleImageFileName = '';
+  }
+
+  clearEditImage(): void {
+    this.editImagePath = '';
+    this.editImagePreview = '';
+    this.editImageFileName = '';
   }
 
   // Guardado automático en localStorage
-  private draftKey = 'simpleRecipeDraft';
-
   saveDraft(): void {
     const draft = {
       title: this.simpleTitle,
@@ -242,9 +339,11 @@ export class AppComponent implements OnInit {
       steps: this.simpleSteps,
       tags: this.simpleTags,
       prepTime: this.simplePrepTime,
+      imagePath: this.simpleImagePath,
       difficulty: this.simpleDifficulty,
       editorMode: this.editorMode
     };
+
     try {
       localStorage.setItem(this.draftKey, JSON.stringify(draft));
     } catch (e) {
@@ -262,10 +361,29 @@ export class AppComponent implements OnInit {
       this.simpleSteps = draft.steps || '';
       this.simpleTags = draft.tags || '';
       this.simplePrepTime = draft.prepTime || '';
+      this.simpleImagePath = draft.imagePath || '';
       this.simpleDifficulty = draft.difficulty || '';
       this.editorMode = draft.editorMode || this.editorMode;
+      this.simpleImagePreview = '';
+      this.simpleImageFileName = '';
     } catch (e) {
       // ignore parse errors
+    }
+  }
+
+  toggleJsonEditor(): void {
+    if (!this.isAdmin) {
+      this.errorMessage = 'Solo el rol admin puede crear recetas.';
+      return;
+    }
+
+    this.showJsonEditor = !this.showJsonEditor;
+    this.successMessage = '';
+    this.errorMessage = '';
+    if (this.showJsonEditor) {
+      this.loadDraft();
+    } else {
+      this.clearSimpleImage();
     }
   }
 
@@ -285,11 +403,10 @@ export class AppComponent implements OnInit {
 
     this.submittingRaw = true;
     this.recipeService.createRawRecipe(payload).subscribe({
-      next: (inserted) => {
+      next: () => {
         this.submittingRaw = false;
         this.errorMessage = '';
         this.showJsonEditor = false;
-        // recargar lista
         this.loadRecipes();
         this.successMessage = 'Receta enviada correctamente.';
       },
@@ -301,7 +418,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  // Construye el objeto desde el formulario amigable y lo envía
   submitSimpleForm(): void {
     if (!this.isAdmin) {
       this.errorMessage = 'Solo el rol admin puede crear recetas.';
@@ -314,12 +430,12 @@ export class AppComponent implements OnInit {
     }
 
     const ingredients = this.simpleIngredients
-      .split(/\r?\n|,/) // acepta líneas o comas
+      .split(/\r?\n|,/)
       .map((s) => s.trim())
       .filter(Boolean);
 
     const steps = this.simpleSteps
-      .split(/\r?\n/) // cada línea es un paso
+      .split(/\r?\n/)
       .map((s) => s.trim())
       .filter(Boolean);
 
@@ -331,10 +447,14 @@ export class AppComponent implements OnInit {
     const payload: any = {
       title: this.simpleTitle.trim(),
       ingredients: ingredients.length ? ingredients : [''],
-      steps: steps.length ? steps : [''],
+      steps: steps.length ? steps : ['']
     };
 
     if (tags.length) payload.tags = tags;
+    const createImage = this.getCreateRecipeImage();
+    if (createImage) {
+      payload.imageUrl = createImage;
+    }
     if (this.simplePrepTime && Number(this.simplePrepTime) > 0) {
       payload.prepTime = Number(this.simplePrepTime);
     }
@@ -367,11 +487,11 @@ export class AppComponent implements OnInit {
     this.simpleTags = '';
     this.simplePrepTime = '';
     this.simpleDifficulty = '';
+    this.clearSimpleImage();
     this.successMessage = '';
     this.errorMessage = '';
   }
 
-  // Métodos de edición
   startEditing(recipe: Recipe): void {
     if (!this.isAdmin) {
       this.errorMessage = 'Solo el rol admin puede editar recetas.';
@@ -385,6 +505,9 @@ export class AppComponent implements OnInit {
     this.editTags = (recipe.tags || []).join(', ');
     this.editPrepTime = recipe.prepTime?.toString() || '';
     this.editDifficulty = recipe.difficulty || '';
+    this.editImagePath = recipe.imageUrl || '';
+    this.editImagePreview = '';
+    this.editImageFileName = '';
     this.showJsonEditor = false;
     this.successMessage = '';
     this.errorMessage = '';
@@ -398,6 +521,8 @@ export class AppComponent implements OnInit {
     this.editTags = '';
     this.editPrepTime = '';
     this.editDifficulty = '';
+    this.clearEditImage();
+    this.submittingEdit = false;
   }
 
   submitEditForm(): void {
@@ -417,7 +542,7 @@ export class AppComponent implements OnInit {
     }
 
     const ingredients = this.editIngredients
-      .split(/\r?\n|,/)
+      .split(/\r?\n|,/) 
       .map((s) => s.trim())
       .filter(Boolean);
 
@@ -434,10 +559,14 @@ export class AppComponent implements OnInit {
     const payload: any = {
       title: this.editTitle.trim(),
       ingredients: ingredients.length ? ingredients : [''],
-      steps: steps.length ? steps : [''],
+      steps: steps.length ? steps : ['']
     };
 
     if (tags.length) payload.tags = tags;
+    const editImage = this.getEditRecipeImage();
+    if (editImage) {
+      payload.imageUrl = editImage;
+    }
     if (this.editPrepTime && Number(this.editPrepTime) > 0) {
       payload.prepTime = Number(this.editPrepTime);
     }
@@ -478,11 +607,11 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    const confirm = window.confirm(
+    const confirmDelete = window.confirm(
       `¿Estás seguro de que quieres eliminar "${recipe.title}"? Esta acción no se puede deshacer.`
     );
 
-    if (!confirm) {
+    if (!confirmDelete) {
       return;
     }
 
@@ -506,7 +635,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  // Método auxiliar para verificar si una receta está siendo editada
   isEditingRecipe(recipe: Recipe): boolean {
     const recipeId = recipe._id || recipe.id;
     return this.editingRecipeId === recipeId;

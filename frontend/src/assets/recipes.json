@@ -3,6 +3,7 @@
     "id": "luna-vainilla",
     "title": "Tarta Lunar de Vainilla",
     "description": "Bizcocho suave con crema de vainilla y brillo de azúcar dorado.",
+    "imageUrl": "https://images.unsplash.com/photo-1562440499-64c9a111f713?auto=format&fit=crop&w=1200&q=80",
     "ingredients": [
       "2 tazas de harina",
       "1 taza de azúcar",
@@ -26,6 +27,7 @@
     "id": "sol-naranja",
     "title": "Mousse Solar de Naranja",
     "description": "Postre cítrico y ligero con notas frescas de ralladura de naranja.",
+    "imageUrl": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=1200&q=80",
     "ingredients": [
       "2 naranjas grandes",
       "250 ml de crema para batir",
@@ -48,6 +50,7 @@
     "id": "bosque-vegano",
     "title": "Ensalada Bosque Esmeralda",
     "description": "Ensalada verde con aguacate, pepino y semillas tostadas.",
+    "imageUrl": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1200&q=80",
     "ingredients": [
       "2 tazas de espinaca baby",
       "1 aguacate",
@@ -71,6 +74,7 @@
     "id": "marea-picante",
     "title": "Sopa de Marea Picante",
     "description": "Caldo especiado con vegetales, maíz y un toque de chile ahumado.",
+    "imageUrl": "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=80",
     "ingredients": [
       "1 cebolla",
       "2 dientes de ajo",
@@ -94,6 +98,7 @@
     "id": "cacao-nocturno",
     "title": "Galletas de Cacao Nocturno",
     "description": "Galletas oscuras con chispas de chocolate y sal marina.",
+    "imageUrl": "https://images.unsplash.com/photo-1499638441028-8aa9e4d1b0f2?auto=format&fit=crop&w=1200&q=80",
     "ingredients": [
       "1 taza de mantequilla",
       "1 taza de azúcar morena",
@@ -117,6 +122,7 @@
     "id": "jardin-citron",
     "title": "Tostadas Jardín Citron",
     "description": "Tostadas con hummus, hierbas frescas y limón confitado.",
+    "imageUrl": "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=80",
     "ingredients": [
       "4 rebanadas de pan artesanal",
       "1 taza de hummus",
