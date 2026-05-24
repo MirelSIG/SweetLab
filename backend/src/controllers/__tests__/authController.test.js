@@ -171,8 +171,8 @@ describe('authController', () => {
 
     mockJwt.verify.mockReturnValue({ tokenType: 'refresh', sub: 'user-1' });
     mockUser.findById.mockResolvedValue({
-      role: 'externo',
-      username: 'externo',
+      role: 'admin',
+      username: 'admin',
       refreshTokens: ['otro-token'],
       save: jest.fn()
     });

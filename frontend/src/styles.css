@@ -81,20 +81,6 @@ h1 {
   line-height: 1.05;
 }
 
-.session-card {
-  min-width: min(320px, 100%);
-  padding: 14px 16px;
-  border-radius: 20px;
-  background: rgba(248, 250, 252, 0.92);
-  border: 1px solid rgba(226, 232, 240, 0.95);
-}
-
-.session-card--active {
-  border-color: rgba(16, 185, 129, 0.3);
-  background: linear-gradient(180deg, rgba(236, 253, 245, 0.95), rgba(240, 253, 244, 0.92));
-}
-
-.session-card__label,
 .hero-kicker {
   display: block;
   margin-bottom: 6px;
@@ -103,19 +89,6 @@ h1 {
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-}
-
-.session-card strong {
-  display: block;
-  color: #111827;
-  font-size: 1.05rem;
-}
-
-.session-card small {
-  display: block;
-  margin-top: 6px;
-  color: #4b5563;
-  line-height: 1.5;
 }
 
 .hero {
@@ -149,21 +122,6 @@ h1 {
   font-weight: 700;
 }
 
-.auth-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 18px;
-}
-
-.auth-input {
-  min-width: 180px;
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.95);
-}
-
 .btn-auth,
 .btn-primary,
 .form-actions button,
@@ -185,21 +143,6 @@ h1 {
   cursor: not-allowed;
 }
 
-.btn-register {
-  background: linear-gradient(180deg, #fbbf24, #f97316);
-  box-shadow: 0 12px 26px rgba(249, 115, 22, 0.24);
-}
-
-.btn-login {
-  background: linear-gradient(180deg, #38bdf8, #2563eb);
-  box-shadow: 0 12px 26px rgba(37, 99, 235, 0.24);
-}
-
-.btn-logout {
-  background: linear-gradient(180deg, #9ca3af, #4b5563);
-  box-shadow: 0 12px 26px rgba(75, 85, 99, 0.18);
-}
-
 .btn-primary {
   background: linear-gradient(180deg, #fb923c, #f97316);
   box-shadow: 0 12px 24px rgba(249, 115, 22, 0.18);
@@ -215,25 +158,9 @@ h1 {
   filter: saturate(1.05);
 }
 
-.session-banner {
-  margin: 14px 0 0;
-  padding: 12px 14px;
-  border-radius: 14px;
-  background: rgba(255, 247, 237, 0.9);
-  color: #9a3412;
-  font-weight: 600;
-}
-
 .role-badge {
   margin: 12px 0 0;
   color: #374151;
-}
-
-.password-hint {
-  margin: 10px 0 0;
-  color: #94a3b8;
-  font-size: 0.9rem;
-  font-style: italic;
 }
 
 .inspiration-strip {
@@ -325,10 +252,6 @@ h1 {
     gap: 16px;
   }
 
-  .session-card {
-    min-width: 0;
-  }
-
   .hero-visual {
     order: -1;
   }
@@ -348,8 +271,7 @@ h1 {
   .editor-shell,
   .recipe-card,
   .detail-panel,
-  .stats article,
-  .session-card {
+  .stats article {
     border-radius: 18px;
   }
 
@@ -420,15 +342,6 @@ h1 {
   .image-upload-row {
     flex-direction: column;
     align-items: stretch;
-  }
-
-  .auth-buttons {
-    flex-direction: column;
-  }
-
-  .auth-input {
-    min-width: 0;
-    width: 100%;
   }
 
   .editor-tabs {

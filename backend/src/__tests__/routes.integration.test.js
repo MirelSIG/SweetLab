@@ -26,7 +26,7 @@ describe('HTTP Routes - Integration', () => {
     test('POST /api/auth/login sin rol devuelve 400', async () => {
       const response = await request(app)
         .post('/api/auth/login')
-        .send({ username: 'admin', password: 'admin123' });
+        .send({ username: 'admin', password: 'SweetLab@2026!' });
 
       expect(response.status).toBe(400);
       expect(response.body.message).toBeDefined();
@@ -35,7 +35,7 @@ describe('HTTP Routes - Integration', () => {
     test('POST /api/auth/login con rol inválido devuelve 400', async () => {
       const response = await request(app)
         .post('/api/auth/login')
-        .send({ role: 'superuser', username: 'admin', password: 'admin123' });
+        .send({ role: 'superuser', username: 'admin', password: 'SweetLab@2026!' });
 
       expect(response.status).toBe(400);
       expect(response.body.message).toContain('Rol invalido');

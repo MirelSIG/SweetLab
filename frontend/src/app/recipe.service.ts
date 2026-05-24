@@ -4,10 +4,10 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { Recipe } from './recipe.model';
 
-export interface LoginResponse {
+export interface AuthResponse {
   token: string;
   refreshToken: string;
-  role: 'admin' | 'externo';
+  role: 'admin';
   expiresIn: string;
 }
 
@@ -19,23 +19,11 @@ export class RecipeService {
   private readonly tokenStorageKey = 'sweetlabAuthToken';
   private readonly refreshTokenStorageKey = 'sweetlabRefreshToken';
   private readonly roleStorageKey = 'sweetlabUserRole';
-  private readonly usernameStorageKey = 'sweetlabUsername';
 
-  login(username: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiBaseUrl}/auth/login`, { username, password });
-  }
-
-  register(username: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiBaseUrl}/auth/register`, { username, password });
-  }
-
-  setSession(token: string, refreshToken: string, role: 'admin' | 'externo', username?: string): void {
+  setSession(token: string, refreshToken: string, role: 'admin', username?: string): void {
     localStorage.setItem(this.tokenStorageKey, token);
     localStorage.setItem(this.refreshTokenStorageKey, refreshToken);
     localStorage.setItem(this.roleStorageKey, role);
-    if (username) {
-      localStorage.setItem(this.usernameStorageKey, username);
-    }
   }
 
   clearSession(logoutOnServer = false): void {
@@ -56,7 +44,6 @@ export class RecipeService {
     localStorage.removeItem(this.tokenStorageKey);
     localStorage.removeItem(this.refreshTokenStorageKey);
     localStorage.removeItem(this.roleStorageKey);
-    localStorage.removeItem(this.usernameStorageKey);
   }
 
   getStoredToken(): string {
@@ -67,13 +54,9 @@ export class RecipeService {
     return localStorage.getItem(this.refreshTokenStorageKey) || '';
   }
 
-  getStoredRole(): 'admin' | 'externo' | null {
+  getStoredRole(): 'admin' | null {
     const role = localStorage.getItem(this.roleStorageKey);
-    return role === 'admin' || role === 'externo' ? role : null;
-  }
-
-  getStoredUsername(): string {
-    return localStorage.getItem(this.usernameStorageKey) || '';
+    return role === 'admin' ? role : null;
   }
 
   private authOptions(): { headers: HttpHeaders } {
@@ -83,13 +66,13 @@ export class RecipeService {
     };
   }
 
-  private refreshAccessToken(): Observable<LoginResponse> {
+  private refreshAccessToken(): Observable<AuthResponse> {
     const refreshToken = this.getStoredRefreshToken();
     if (!refreshToken) {
       return throwError(() => new Error('No hay refresh token almacenado.'));
     }
 
-    return this.http.post<LoginResponse>(`${this.apiBaseUrl}/auth/refresh`, { refreshToken });
+    return this.http.post<AuthResponse>(`${this.apiBaseUrl}/auth/refresh`, { refreshToken });
   }
 
   private withAutoRefresh<T>(requestFactory: () => Observable<T>): Observable<T> {
@@ -101,7 +84,7 @@ export class RecipeService {
 
         return this.refreshAccessToken().pipe(
           switchMap((refreshResponse) => {
-            this.setSession(refreshResponse.token, refreshResponse.refreshToken, refreshResponse.role, this.getStoredUsername());
+            this.setSession(refreshResponse.token, refreshResponse.refreshToken, refreshResponse.role);
             return requestFactory();
           }),
           catchError((refreshError) => {

@@ -12,8 +12,6 @@ const PASSWORD_RULES_MESSAGE = 'La contraseña debe tener mínimo 8 caracteres, 
 
 const failedAttemptsByIdentity = new Map();
 
-const allowedRoles = ['admin', 'externo'];
-
 const isPasswordFormatValid = (password) => (
   typeof password === 'string'
   && password.length >= 8
@@ -91,8 +89,7 @@ const storeRefreshToken = async (userId, refreshToken) => {
 };
 
 exports.register = async (req, res) => {
-  // Ahora el registro por defecto crea usuarios con rol 'externo'.
-  const { role: requestedRole, username, password } = req.body || {};
+  const { username, password } = req.body || {};
 
   if (!username || !password) {
     return res.status(400).json({ message: 'Usuario y contraseña son obligatorios.' });
@@ -102,12 +99,6 @@ exports.register = async (req, res) => {
     return res.status(400).json({ message: PASSWORD_RULES_MESSAGE });
   }
 
-  // Si se solicita crear admin, solo permitir si se habilita explícitamente.
-  const role = requestedRole && allowedRoles.includes(requestedRole) ? requestedRole : 'externo';
-  if (role === 'admin' && process.env.ALLOW_ADMIN_REGISTRATION !== 'true') {
-    return res.status(403).json({ message: 'Registro de admin no permitido.' });
-  }
-
   try {
     const existing = await User.findOne({ username });
     if (existing) {
@@ -115,7 +106,7 @@ exports.register = async (req, res) => {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const user = await User.create({ username, passwordHash, role, refreshTokens: [] });
+    const user = await User.create({ username, passwordHash, role: 'admin', refreshTokens: [] });
 
     const token = buildAccessToken({ role: user.role, username: user.username });
     const refreshToken = buildRefreshToken({

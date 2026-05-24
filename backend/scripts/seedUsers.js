@@ -16,17 +16,14 @@ const usersToSeed = [
   {
     role: 'admin',
     username: process.env.ADMIN_USERNAME || 'admin',
-    password: process.env.ADMIN_PASSWORD || 'admin123'
-  },
-  {
-    role: 'externo',
-    username: process.env.EXTERNAL_USERNAME || 'externo',
-    password: process.env.EXTERNAL_PASSWORD || 'externo123'
+    password: process.env.ADMIN_PASSWORD || 'SweetLab@2026!'
   }
 ];
 
 const seed = async () => {
   await mongoose.connect(MONGO_URI);
+
+  await User.deleteMany({ role: { $ne: 'admin' } });
 
   for (const user of usersToSeed) {
     const passwordHash = await bcrypt.hash(user.password, 10);

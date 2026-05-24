@@ -8,12 +8,6 @@
       </div>
     </div>
 
-    <div class="session-card" [class.session-card--active]="isAuthenticated">
-      <span class="session-card__label">{{ isAuthenticated ? 'Usuario activo' : 'Acceso' }}</span>
-      <strong>{{ isAuthenticated ? currentUserName : 'Invitado' }}</strong>
-      <small *ngIf="isAuthenticated">Ya estás registrado y puedes continuar como {{ userRole }}.</small>
-      <small *ngIf="!isAuthenticated">Inicia sesión o registra tu usuario.</small>
-    </div>
   </header>
 
   <section class="hero">
@@ -21,43 +15,9 @@
       <p class="hero-kicker">Recetas, edición y experimentación</p>
       <h2>Laboratorio de Mailisol para explorar, registrar y mejorar sus recetas.</h2>
       <p class="hero-text">
-        Las recetas públicas se inspiran en las imágenes de <span>assets</span>, así que cualquier visitante puede
-        verlas sin iniciar sesión.
+        Las recetas son públicas y la edición queda reservada a administradores.
       </p>
-
-      <div class="auth-buttons">
-        <input
-          type="text"
-          class="auth-input"
-          [(ngModel)]="loginUsername"
-          name="loginUsername"
-          placeholder="Usuario"
-          [disabled]="loading"
-        />
-        <input
-          type="password"
-          class="auth-input"
-          [(ngModel)]="loginPassword"
-          name="loginPassword"
-          placeholder="Mín. 8 caracteres, 1 mayúscula, 1 minúscula y 1 número"
-          [disabled]="loading"
-        />
-        <button type="button" class="btn-auth btn-register" (click)="registerAs()" [disabled]="loading || isAuthenticated">
-          REGISTRARTE
-        </button>
-        <button type="button" class="btn-auth btn-login" (click)="loginAs()" [disabled]="loading || isAuthenticated">
-          INGRESAR
-        </button>
-        <button *ngIf="isAuthenticated" type="button" class="btn-auth btn-logout" (click)="logout()">
-          Cerrar sesión
-        </button>
-      </div>
-
-      <p *ngIf="sessionBanner" class="session-banner">{{ sessionBanner }}</p>
-      <p *ngIf="isAuthenticated" class="role-badge">
-        Rol actual: <strong>{{ userRole }}</strong>
-      </p>
-      <p class="password-hint">La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula y un número.</p>
+      <p class="role-badge">Acceso de edición limitado a administradores.</p>
     </div>
 
     <div class="hero-visual" aria-hidden="true">
@@ -123,8 +83,8 @@
       <div class="controls">
         <button *ngIf="isAdmin" type="button" class="btn-primary" (click)="toggleJsonEditor()">Añadir receta</button>
         <p *ngIf="isAuthenticated && !isAdmin" class="readonly-note">
-          Modo lectura: con rol externo solo puedes consultar recetas.
-        </p>
+            Modo lectura: inicia sesión como admin para crear o editar recetas.
+          </p>
       </div>
 
       <div *ngIf="showJsonEditor && isAdmin" class="editor-shell">
