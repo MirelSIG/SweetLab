@@ -238,6 +238,22 @@
   box-shadow: 0 20px 40px rgba(249, 115, 22, 0.12);
 }
 
+.recipe-card--featured {
+  padding: 22px;
+}
+
+.recipe-card--featured .recipe-media {
+  height: 230px;
+}
+
+.recipe-card--featured h2 {
+  font-size: 1.34rem;
+}
+
+.recipe-card--featured .recipe-card p {
+  font-size: 1rem;
+}
+
 .recipe-media,
 .detail-media {
   overflow: hidden;

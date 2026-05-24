@@ -54,15 +54,12 @@ input {
 .brand-mark {
   display: grid;
   place-items: center;
-  width: 54px;
   height: 54px;
   border-radius: 18px;
   background: linear-gradient(135deg, #ea580c, #f97316 65%, #fb923c);
-  color: #fff;
   font-size: 1.1rem;
   font-weight: 800;
   letter-spacing: 0.08em;
-  box-shadow: 0 16px 28px rgba(249, 115, 22, 0.28);
 }
 
 .eyebrow {
@@ -72,155 +69,6 @@ input {
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-}
-
-h1 {
-  margin: 0;
-  color: #111827;
-  font-size: clamp(1.3rem, 2vw, 1.95rem);
-  line-height: 1.05;
-}
-
-.hero-kicker {
-  display: block;
-  margin-bottom: 6px;
-  color: #ea580c;
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.hero {
-  display: grid;
-  gap: 24px;
-  align-items: center;
-  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
-  margin-bottom: 28px;
-}
-
-.hero-copy {
-  max-width: 66ch;
-}
-
-.hero-copy h2 {
-  margin: 0;
-  color: #111827;
-  font-size: clamp(1.8rem, 4vw, 3.1rem);
-  line-height: 0.98;
-}
-
-.hero-text {
-  margin: 16px 0 0;
-  color: #4b5563;
-  font-size: 1.02rem;
-  line-height: 1.72;
-}
-
-.hero-text span {
-  color: #0f766e;
-  font-weight: 700;
-}
-
-.btn-auth,
-.btn-primary,
-.form-actions button,
-.editor-actions button,
-.editor-tabs button,
-.image-upload-row button {
-  border: none;
-  border-radius: 999px;
-  padding: 11px 16px;
-  color: #fff;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease, filter 0.18s ease;
-}
-
-.btn-auth:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-.btn-primary {
-  background: linear-gradient(180deg, #fb923c, #f97316);
-  box-shadow: 0 12px 24px rgba(249, 115, 22, 0.18);
-}
-
-.btn-primary:hover,
-.btn-auth:hover,
-.form-actions button:hover,
-.editor-actions button:hover,
-.editor-tabs button:hover,
-.image-upload-row button:hover {
-  transform: translateY(-2px);
-  filter: saturate(1.05);
-}
-
-.role-badge {
-  margin: 12px 0 0;
-  color: #374151;
-}
-
-.inspiration-strip {
-  padding: 16px 18px;
-  border-radius: 20px;
-  background: linear-gradient(180deg, rgba(255, 247, 237, 0.95), rgba(255, 255, 255, 0.95));
-  border: 1px solid rgba(251, 146, 60, 0.2);
-  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.04);
-}
-
-.inspiration-strip h3 {
-  margin: 0;
-  color: #111827;
-  font-size: 1.02rem;
-}
-
-.inspiration-strip p {
-  margin: 8px 0 0;
-  color: #4b5563;
-  line-height: 1.55;
-}
-
-.hero-visual {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  align-self: stretch;
-}
-
-.hero-visual__tile {
-  margin: 0;
-  overflow: hidden;
-  border-radius: 24px;
-  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.18);
-}
-
-.hero-visual__tile img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.hero-visual__tile--large {
-  grid-column: 1 / span 2;
-  min-height: 230px;
-}
-
-.hero-visual__tile--tall {
-  min-height: 190px;
-}
-
-.hero-visual__tile--wide {
-  min-height: 190px;
-}
-
-.readonly-note {
-  margin: 0;
-  color: #0f766e;
-  font-weight: 600;
 }
 
 .success,
@@ -254,6 +102,13 @@ h1 {
 
   .hero-visual {
     order: -1;
+  }
+
+  .hero-visual__tile--large,
+  .hero-visual__tile--tall,
+  .hero-visual__tile--wide {
+    grid-column: auto;
+    aspect-ratio: 16 / 10;
   }
 
   .detail-panel {
@@ -311,7 +166,7 @@ h1 {
   .hero-visual__tile--tall,
   .hero-visual__tile--wide {
     grid-column: auto;
-    min-height: 190px;
+    aspect-ratio: 16 / 10;
   }
 
   .recipe-card,
@@ -328,7 +183,7 @@ h1 {
   }
 
   .recipe-media {
-    height: 150px;
+    aspect-ratio: 4 / 3;
   }
 
   .detail-media,

@@ -1,8 +1,8 @@
 [
   {
     "id": "luna-vainilla",
-    "title": "Tarta Lunar de Vainilla",
-    "description": "Bizcocho suave con crema de vainilla y brillo de azúcar dorado.",
+    "title": "Receta visual 01",
+    "description": "Imagen destacada para completar después.",
     "imageUrl": "assets/originals/Tarta_decorada1.jpg",
     "ingredients": [
       "2 tazas de harina",
@@ -24,9 +24,80 @@
     "difficulty": "Media"
   },
   {
+    "id": "arepa-brillante",
+    "title": "Receta visual 02",
+    "description": "Imagen destacada para completar después.",
+    "imageUrl": "assets/originals/arepas_en_coccion.jpg",
+    "ingredients": [
+      "2 tazas de harina de maíz precocida",
+      "2 tazas de agua tibia",
+      "1 cucharadita de sal",
+      "1 cucharada de mantequilla",
+      "Queso blanco rallado"
+    ],
+    "steps": [
+      "Mezclar la harina con el agua y la sal hasta formar una masa suave.",
+      "Dejar reposar 5 minutos y dar forma a las arepas.",
+      "Cocinar en sartén hasta que estén doradas por ambos lados.",
+      "Abrir y rellenar con queso blanco y mantequilla."
+    ],
+    "tags": ["maíz", "desayuno", "venezolano"],
+    "prepTime": 25,
+    "servings": 4,
+    "difficulty": "Fácil"
+  },
+  {
+    "id": "pan-caldeado",
+    "title": "Receta visual 03",
+    "description": "Imagen destacada para completar después.",
+    "imageUrl": "assets/originals/Pan_de_Jamon2.jpg",
+    "ingredients": [
+      "3 tazas de harina de trigo",
+      "1 taza de leche",
+      "2 cucharadas de azúcar",
+      "1 cucharada de levadura seca",
+      "1 huevo",
+      "1 cucharadita de sal"
+    ],
+    "steps": [
+      "Activar la levadura con la leche tibia y el azúcar.",
+      "Mezclar con harina, huevo y sal hasta lograr una masa elástica.",
+      "Dejar levar hasta duplicar su tamaño.",
+      "Hornear hasta que el pan quede dorado y fragante."
+    ],
+    "tags": ["pan", "casero", "horno"],
+    "prepTime": 90,
+    "servings": 6,
+    "difficulty": "Media"
+  },
+  {
+    "id": "cachapas",
+    "title": "Receta visual 04",
+    "description": "Imagen destacada para completar después.",
+    "imageUrl": "assets/originals/Cachapa_con_Queso1.jpg",
+    "ingredients": [
+      "2 tazas de granos de maíz tierno",
+      "1/2 taza de leche",
+      "2 cucharadas de azúcar",
+      "1 pizca de sal",
+      "1 cucharada de mantequilla",
+      "Queso fresco para rellenar"
+    ],
+    "steps": [
+      "Licuar el maíz con la leche, el azúcar y la sal hasta obtener una mezcla espesa.",
+      "Calentar una sartén con mantequilla y verter porciones de la mezcla.",
+      "Cocinar por ambos lados hasta que estén doradas.",
+      "Rellenar con queso fresco y servir calientes."
+    ],
+    "tags": ["desayuno", "venezolano", "maíz"],
+    "prepTime": 30,
+    "servings": 4,
+    "difficulty": "Media"
+  },
+  {
     "id": "sol-naranja",
-    "title": "Golfeados",
-    "description": "Postre cítrico y ligero con notas frescas de ralladura de naranja.",
+    "title": "Receta visual 05",
+    "description": "Imagen destacada para completar después.",
     "imageUrl": "assets/originals/Golfeados1.jpg",
     "ingredients": [
       "2 naranjas grandes",
@@ -47,9 +118,57 @@
     "difficulty": "Fácil"
   },
   {
+    "id": "jardin-citron",
+    "title": "Receta visual 06",
+    "description": "Imagen destacada para completar después.",
+    "imageUrl": "assets/originals/Empanadas.jpg",
+    "ingredients": [
+      "4 rebanadas de pan artesanal",
+      "1 taza de hummus",
+      "Hojas de albahaca fresca",
+      "1 limón confitado",
+      "Aceite de oliva",
+      "Pimienta negra molida"
+    ],
+    "steps": [
+      "Tostar el pan hasta que esté crujiente.",
+      "Untar una capa generosa de hummus.",
+      "Agregar limón confitado y hojas de albahaca.",
+      "Terminar con aceite de oliva y pimienta negra."
+    ],
+    "tags": ["desayuno", "rápido", "mediterráneo"],
+    "prepTime": 10,
+    "servings": 2,
+    "difficulty": "Fácil"
+  },
+  {
+    "id": "cacao-nocturno",
+    "title": "Receta visual 07",
+    "description": "Imagen destacada para completar después.",
+    "imageUrl": "assets/originals/cinnamon_rolls.jpg",
+    "ingredients": [
+      "1 taza de mantequilla",
+      "1 taza de azúcar morena",
+      "2 tazas de harina",
+      "1/2 taza de cacao en polvo",
+      "1 huevo",
+      "1 taza de chispas de chocolate"
+    ],
+    "steps": [
+      "Batir la mantequilla con el azúcar hasta cremar.",
+      "Integrar el huevo y el cacao.",
+      "Añadir harina y chispas de chocolate.",
+      "Hornear por 12 minutos a 190 °C."
+    ],
+    "tags": ["galletas", "chocolate", "snack"],
+    "prepTime": 25,
+    "servings": 12,
+    "difficulty": "Fácil"
+  },
+  {
     "id": "bosque-vegano",
-    "title": "Pastelitos andinos",
-    "description": "Ensalada verde con aguacate, pepino y semillas tostadas.",
+    "title": "Receta visual 08",
+    "description": "Imagen destacada para completar después.",
     "imageUrl": "assets/originals/pasteles_andinos.jpg",
     "ingredients": [
       "2 tazas de espinaca baby",
@@ -72,8 +191,8 @@
   },
   {
     "id": "marea-picante",
-    "title": "Patatas Rellenas Picantes",
-    "description": "Caldo especiado con vegetales, maíz y un toque de chile ahumado.",
+    "title": "Receta visual 09",
+    "description": "Imagen destacada para completar después.",
     "imageUrl": "assets/originals/Patatas_rellenas.jpg",
     "ingredients": [
       "1 cebolla",
@@ -95,128 +214,9 @@
     "difficulty": "Media"
   },
   {
-    "id": "cacao-nocturno",
-    "title": "Rollos de canela",
-    "description": "Galletas oscuras con chispas de chocolate y sal marina.",
-    "imageUrl": "assets/originals/cinnamon_rolls.jpg",
-    "ingredients": [
-      "1 taza de mantequilla",
-      "1 taza de azúcar morena",
-      "2 tazas de harina",
-      "1/2 taza de cacao en polvo",
-      "1 huevo",
-      "1 taza de chispas de chocolate"
-    ],
-    "steps": [
-      "Batir la mantequilla con el azúcar hasta cremar.",
-      "Integrar el huevo y el cacao.",
-      "Añadir harina y chispas de chocolate.",
-      "Hornear por 12 minutos a 190 °C."
-    ],
-    "tags": ["galletas", "chocolate", "snack"],
-    "prepTime": 25,
-    "servings": 12,
-    "difficulty": "Fácil"
-  },
-  {
-    "id": "jardin-citron",
-    "title": "Empanadas rellenas de pollo, carne y queso",
-    "description": "Tostadas con hummus, hierbas frescas y limón confitado.",
-    "imageUrl": "assets/originals/Empanadas.jpg",
-    "ingredients": [
-      "4 rebanadas de pan artesanal",
-      "1 taza de hummus",
-      "Hojas de albahaca fresca",
-      "1 limón confitado",
-      "Aceite de oliva",
-      "Pimienta negra molida"
-    ],
-    "steps": [
-      "Tostar el pan hasta que esté crujiente.",
-      "Untar una capa generosa de hummus.",
-      "Agregar limón confitado y hojas de albahaca.",
-      "Terminar con aceite de oliva y pimienta negra."
-    ],
-    "tags": ["desayuno", "rápido", "mediterráneo"],
-    "prepTime": 10,
-    "servings": 2,
-    "difficulty": "Fácil"
-  },
-  {
-    "id": "cachapas",
-    "title": "Cachapas Caseras con queso fresco",
-    "description": "Cachapas dulces con queso fresco, inspiradas en una receta tradicional venezolana.",
-    "imageUrl": "assets/originals/Cachapa_con_Queso1.jpg",
-    "ingredients": [
-      "2 tazas de granos de maíz tierno",
-      "1/2 taza de leche",
-      "2 cucharadas de azúcar",
-      "1 pizca de sal",
-      "1 cucharada de mantequilla",
-      "Queso fresco para rellenar"
-    ],
-    "steps": [
-      "Licuar el maíz con la leche, el azúcar y la sal hasta obtener una mezcla espesa.",
-      "Calentar una sartén con mantequilla y verter porciones de la mezcla.",
-      "Cocinar por ambos lados hasta que estén doradas.",
-      "Rellenar con queso fresco y servir calientes."
-    ],
-    "tags": ["desayuno", "venezolano", "maíz"],
-    "prepTime": 30,
-    "servings": 4,
-    "difficulty": "Media"
-  },
-  {
-    "id": "arepa-brillante",
-    "title": "Arepas en la plancha",
-    "description": "Arepas doradas con queso suave, pensadas para usar fotos de maíz y cocina casera.",
-    "imageUrl": "assets/originals/arepas_en_coccion.jpg",
-    "ingredients": [
-      "2 tazas de harina de maíz precocida",
-      "2 tazas de agua tibia",
-      "1 cucharadita de sal",
-      "1 cucharada de mantequilla",
-      "Queso blanco rallado"
-    ],
-    "steps": [
-      "Mezclar la harina con el agua y la sal hasta formar una masa suave.",
-      "Dejar reposar 5 minutos y dar forma a las arepas.",
-      "Cocinar en sartén hasta que estén doradas por ambos lados.",
-      "Abrir y rellenar con queso blanco y mantequilla."
-    ],
-    "tags": ["maíz", "desayuno", "venezolano"],
-    "prepTime": 25,
-    "servings": 4,
-    "difficulty": "Fácil"
-  },
-  {
-    "id": "pan-caldeado",
-    "title": "Pan de Jamon Navideno",
-    "description": "Pan suave y tibio, inspirado en las fotos de panes y mesas familiares.",
-    "imageUrl": "assets/originals/Pan_de_Jamon.jpg",
-    "ingredients": [
-      "3 tazas de harina de trigo",
-      "1 taza de leche",
-      "2 cucharadas de azúcar",
-      "1 cucharada de levadura seca",
-      "1 huevo",
-      "1 cucharadita de sal"
-    ],
-    "steps": [
-      "Activar la levadura con la leche tibia y el azúcar.",
-      "Mezclar con harina, huevo y sal hasta lograr una masa elástica.",
-      "Dejar levar hasta duplicar su tamaño.",
-      "Hornear hasta que el pan quede dorado y fragante."
-    ],
-    "tags": ["pan", "casero", "horno"],
-    "prepTime": 90,
-    "servings": 6,
-    "difficulty": "Media"
-  },
-  {
     "id": "dulce-solar",
-    "title": "Penecillos dulces rellenos de mermelada de frutas",
-    "description": "Postre de frutas brillantes para acompañar imágenes luminosas y coloridas.",
+    "title": "Receta visual 10",
+    "description": "Imagen destacada para completar después.",
     "imageUrl": "assets/originals/panecillos_dulces_rellenos_1.jpg",
     "ingredients": [
       "1 taza de mango picado",

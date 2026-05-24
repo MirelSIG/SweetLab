@@ -13,7 +13,7 @@
   <section class="hero">
     <div class="hero-copy">
       <p class="hero-kicker">Recetas, edición y experimentación</p>
-      <h2>Laboratorio de Mailisol para explorar, registrar y mejorar sus recetas.</h2>
+      <h2 class="hero-title">Laboratorio de Mailisol para explorar, registrar y mejorar sus recetas.</h2>
       <p class="hero-text">
         Acceso de edición limitado a administradores.
       </p>
@@ -21,13 +21,13 @@
 
     <div class="hero-visual" aria-hidden="true">
       <figure class="hero-visual__tile hero-visual__tile--large">
-        <img src="assets/images/cachapas.svg" alt="Cachapas caseras" loading="lazy" />
+        <img src="assets/originals/Tarta_decorada1.jpg" alt="Tarta decorada" loading="lazy" />
       </figure>
       <figure class="hero-visual__tile hero-visual__tile--tall">
-        <img src="assets/images/arepa-brillante.svg" alt="Arepas brillantes" loading="lazy" />
+        <img src="assets/originals/arepas_en_coccion.jpg" alt="Arepas en cocción" loading="lazy" />
       </figure>
       <figure class="hero-visual__tile hero-visual__tile--wide">
-        <img src="assets/images/bosque-vegano.svg" alt="Ensalada bosque esmeralda" loading="lazy" />
+        <img src="assets/originals/Pan_de_Jamon2.jpg" alt="Pan de jamón" loading="lazy" />
       </figure>
     </div>
 
@@ -147,9 +147,10 @@
       <div *ngIf="errorMessage" class="info-card error">{{ errorMessage }}</div>
 
       <button
-        *ngFor="let recipe of filteredRecipes; trackBy: trackByRecipe"
+        *ngFor="let recipe of filteredRecipes; let recipeIndex = index; trackBy: trackByRecipe"
         type="button"
         class="recipe-card"
+        [class.recipe-card--featured]="recipeIndex < 3"
         [class.active]="(selectedRecipe?._id || selectedRecipe?.id) === (recipe._id || recipe.id)"
         (click)="selectRecipe(recipe)"
       >
