@@ -3,7 +3,7 @@
     "id": "luna-vainilla",
     "title": "Tarta Lunar de Vainilla",
     "description": "Bizcocho suave con crema de vainilla y brillo de azúcar dorado.",
-    "imageUrl": "https://images.unsplash.com/photo-1562440499-64c9a111f713?auto=format&fit=crop&w=1200&q=80",
+    "imageUrl": "assets/images/luna-vainilla.svg",
     "ingredients": [
       "2 tazas de harina",
       "1 taza de azúcar",
@@ -27,7 +27,7 @@
     "id": "sol-naranja",
     "title": "Mousse Solar de Naranja",
     "description": "Postre cítrico y ligero con notas frescas de ralladura de naranja.",
-    "imageUrl": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=1200&q=80",
+    "imageUrl": "assets/images/sol-naranja.svg",
     "ingredients": [
       "2 naranjas grandes",
       "250 ml de crema para batir",
@@ -50,7 +50,7 @@
     "id": "bosque-vegano",
     "title": "Ensalada Bosque Esmeralda",
     "description": "Ensalada verde con aguacate, pepino y semillas tostadas.",
-    "imageUrl": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1200&q=80",
+    "imageUrl": "assets/images/bosque-vegano.svg",
     "ingredients": [
       "2 tazas de espinaca baby",
       "1 aguacate",
@@ -74,7 +74,7 @@
     "id": "marea-picante",
     "title": "Sopa de Marea Picante",
     "description": "Caldo especiado con vegetales, maíz y un toque de chile ahumado.",
-    "imageUrl": "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=80",
+    "imageUrl": "assets/images/marea-picante.svg",
     "ingredients": [
       "1 cebolla",
       "2 dientes de ajo",
@@ -98,7 +98,7 @@
     "id": "cacao-nocturno",
     "title": "Galletas de Cacao Nocturno",
     "description": "Galletas oscuras con chispas de chocolate y sal marina.",
-    "imageUrl": "https://images.unsplash.com/photo-1499638441028-8aa9e4d1b0f2?auto=format&fit=crop&w=1200&q=80",
+    "imageUrl": "assets/images/cacao-nocturno.svg",
     "ingredients": [
       "1 taza de mantequilla",
       "1 taza de azúcar morena",
@@ -122,7 +122,7 @@
     "id": "jardin-citron",
     "title": "Tostadas Jardín Citron",
     "description": "Tostadas con hummus, hierbas frescas y limón confitado.",
-    "imageUrl": "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=80",
+    "imageUrl": "assets/images/jardin-citron.svg",
     "ingredients": [
       "4 rebanadas de pan artesanal",
       "1 taza de hummus",
@@ -146,7 +146,7 @@
     "id": "cachapas",
     "title": "Cachapas Caseras",
     "description": "Cachapas dulces con queso fresco, inspiradas en una receta tradicional venezolana.",
-    "imageUrl": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+    "imageUrl": "assets/images/cachapas.svg",
     "ingredients": [
       "2 tazas de granos de maíz tierno",
       "1/2 taza de leche",
@@ -170,7 +170,7 @@
     "id": "arepa-brillante",
     "title": "Arepas Brillantes",
     "description": "Arepas doradas con queso suave, pensadas para usar fotos de maíz y cocina casera.",
-    "imageUrl": "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1200&q=80",
+    "imageUrl": "assets/images/arepa-brillante.svg",
     "ingredients": [
       "2 tazas de harina de maíz precocida",
       "2 tazas de agua tibia",
@@ -193,7 +193,7 @@
     "id": "pan-caldeado",
     "title": "Pan Caldeado de Hogar",
     "description": "Pan suave y tibio, inspirado en las fotos de panes y mesas familiares.",
-    "imageUrl": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1200&q=80",
+    "imageUrl": "assets/images/pan-caldeado.svg",
     "ingredients": [
       "3 tazas de harina de trigo",
       "1 taza de leche",
@@ -217,7 +217,7 @@
     "id": "dulce-solar",
     "title": "Dulce Solar de Frutas",
     "description": "Postre de frutas brillantes para acompañar imágenes luminosas y coloridas.",
-    "imageUrl": "https://images.unsplash.com/photo-1464306076886-da185f6a9f5e?auto=format&fit=crop&w=1200&q=80",
+    "imageUrl": "assets/images/dulce-solar.svg",
     "ingredients": [
       "1 taza de mango picado",
       "1 taza de piña picada",

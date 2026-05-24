@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title>Tarta Lunar de Vainilla</title>
+  <desc>Ilustración local para la receta de vainilla.</desc>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="55%" stop-color="#fb923c"/>
+      <stop offset="100%" stop-color="#9a3412"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#g)"/>
+  <circle cx="920" cy="160" r="110" fill="rgba(255,255,255,0.22)"/>
+  <circle cx="250" cy="560" r="170" fill="rgba(255,255,255,0.14)"/>
+  <path d="M120 610 C260 510, 360 530, 470 620 S740 740, 980 600" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="18" stroke-linecap="round"/>
+  <rect x="255" y="250" rx="36" ry="36" width="690" height="300" fill="rgba(255,255,255,0.18)"/>
+  <text x="600" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="72" font-weight="700" fill="#fff">Tarta Lunar</text>
+  <text x="600" y="470" text-anchor="middle" font-family="Arial, sans-serif" font-size="42" fill="#fff">Vainilla</text>
+</svg>
