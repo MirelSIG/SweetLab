@@ -242,7 +242,7 @@
   padding: 22px;
 }
 
-.recipe-card--featured .recipe-media {
+.recipe-card--featured p {
   height: 230px;
 }
 
@@ -274,6 +274,7 @@
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  height: 190px;
 }
 
 .detail-media {
@@ -285,6 +286,24 @@
   min-height: 240px;
 }
 
+.detail-panel {
+  padding: 22px;
+  position: sticky;
+  top: 20px;
+  align-self: start;
+}
+
+.recipe-card--featured .recipe-media {
+  height: 250px;
+}
+
+.recipe-card--featured h2 {
+  font-size: 1.34rem;
+}
+
+.recipe-card--featured p {
+  font-size: 1rem;
+}
 .card-top,
 .detail-meta,
 .tag-row {
@@ -347,7 +366,7 @@
 }
 
 .detail-panel {
-  padding: 24px;
+  padding: 22px;
   position: sticky;
   top: 20px;
   align-self: start;
