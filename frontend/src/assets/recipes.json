@@ -141,5 +141,100 @@
     "prepTime": 10,
     "servings": 2,
     "difficulty": "Fácil"
+  },
+  {
+    "id": "cachapas",
+    "title": "Cachapas Caseras",
+    "description": "Cachapas dulces con queso fresco, inspiradas en una receta tradicional venezolana.",
+    "imageUrl": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
+    "ingredients": [
+      "2 tazas de granos de maíz tierno",
+      "1/2 taza de leche",
+      "2 cucharadas de azúcar",
+      "1 pizca de sal",
+      "1 cucharada de mantequilla",
+      "Queso fresco para rellenar"
+    ],
+    "steps": [
+      "Licuar el maíz con la leche, el azúcar y la sal hasta obtener una mezcla espesa.",
+      "Calentar una sartén con mantequilla y verter porciones de la mezcla.",
+      "Cocinar por ambos lados hasta que estén doradas.",
+      "Rellenar con queso fresco y servir calientes."
+    ],
+    "tags": ["desayuno", "venezolano", "maíz"],
+    "prepTime": 30,
+    "servings": 4,
+    "difficulty": "Media"
+  },
+  {
+    "id": "arepa-brillante",
+    "title": "Arepas Brillantes",
+    "description": "Arepas doradas con queso suave, pensadas para usar fotos de maíz y cocina casera.",
+    "imageUrl": "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1200&q=80",
+    "ingredients": [
+      "2 tazas de harina de maíz precocida",
+      "2 tazas de agua tibia",
+      "1 cucharadita de sal",
+      "1 cucharada de mantequilla",
+      "Queso blanco rallado"
+    ],
+    "steps": [
+      "Mezclar la harina con el agua y la sal hasta formar una masa suave.",
+      "Dejar reposar 5 minutos y dar forma a las arepas.",
+      "Cocinar en sartén hasta que estén doradas por ambos lados.",
+      "Abrir y rellenar con queso blanco y mantequilla."
+    ],
+    "tags": ["maíz", "desayuno", "venezolano"],
+    "prepTime": 25,
+    "servings": 4,
+    "difficulty": "Fácil"
+  },
+  {
+    "id": "pan-caldeado",
+    "title": "Pan Caldeado de Hogar",
+    "description": "Pan suave y tibio, inspirado en las fotos de panes y mesas familiares.",
+    "imageUrl": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1200&q=80",
+    "ingredients": [
+      "3 tazas de harina de trigo",
+      "1 taza de leche",
+      "2 cucharadas de azúcar",
+      "1 cucharada de levadura seca",
+      "1 huevo",
+      "1 cucharadita de sal"
+    ],
+    "steps": [
+      "Activar la levadura con la leche tibia y el azúcar.",
+      "Mezclar con harina, huevo y sal hasta lograr una masa elástica.",
+      "Dejar levar hasta duplicar su tamaño.",
+      "Hornear hasta que el pan quede dorado y fragante."
+    ],
+    "tags": ["pan", "casero", "horno"],
+    "prepTime": 90,
+    "servings": 6,
+    "difficulty": "Media"
+  },
+  {
+    "id": "dulce-solar",
+    "title": "Dulce Solar de Frutas",
+    "description": "Postre de frutas brillantes para acompañar imágenes luminosas y coloridas.",
+    "imageUrl": "https://images.unsplash.com/photo-1464306076886-da185f6a9f5e?auto=format&fit=crop&w=1200&q=80",
+    "ingredients": [
+      "1 taza de mango picado",
+      "1 taza de piña picada",
+      "1 taza de fresas",
+      "2 cucharadas de miel",
+      "Jugo de 1 limón",
+      "Hojas de menta"
+    ],
+    "steps": [
+      "Cortar todas las frutas en cubos medianos.",
+      "Mezclar con miel y jugo de limón.",
+      "Refrigerar 20 minutos.",
+      "Servir con menta fresca por encima."
+    ],
+    "tags": ["fruta", "postre", "fresco"],
+    "prepTime": 15,
+    "servings": 4,
+    "difficulty": "Fácil"
   }
 ]

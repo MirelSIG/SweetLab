@@ -76,6 +76,7 @@ export class AppComponent implements OnInit {
     // Load asset images for public view even when not authenticated
     this.loadAssetImages().finally(() => {
       this.sessionBanner = 'Ingresa usuario y contraseña para iniciar sesión o registrarte.';
+      this.loadRecipes();
     });
   }
 
@@ -191,7 +192,7 @@ export class AppComponent implements OnInit {
     this.recipeService.getRecipes().subscribe({
       next: (recipes) => {
         this.recipes = recipes;
-        this.selectedRecipe = recipes[0];
+        this.selectedRecipe = this.selectedRecipe || recipes[0];
         this.loading = false;
         this.errorMessage = '';
       },

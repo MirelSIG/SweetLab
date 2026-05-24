@@ -19,10 +19,10 @@
   <section class="hero">
     <div class="hero-copy">
       <p class="hero-kicker">Recetas, edición y experimentación</p>
-      <h2>Explora, registra y mejora recetas con una interfaz más clara.</h2>
+      <h2>Laboratorio de Mailisol para explorar, registrar y mejorar sus recetas.</h2>
       <p class="hero-text">
-        Guarda tus recetas, adjunta imágenes desde <span>./assets</span> o desde un archivo local,
-        y continúa trabajando sin perder la sesión activa.
+        Las recetas públicas se inspiran en las imágenes de <span>assets</span>, así que cualquier visitante puede
+        verlas sin iniciar sesión.
       </p>
 
       <div class="auth-buttons">
@@ -112,6 +112,14 @@
 
   <section class="content-grid">
     <div class="recipe-list" aria-label="Listado de recetas">
+      <div class="inspiration-strip">
+        <h3>Ideas tomadas de las imágenes</h3>
+        <p>
+          Cachapas, arepas, panes dorados y postres frutales son el punto de partida para crear recetas visuales y
+          fáciles de reconocer.
+        </p>
+      </div>
+
       <div class="controls">
         <button *ngIf="isAdmin" type="button" class="btn-primary" (click)="toggleJsonEditor()">Añadir receta</button>
         <p *ngIf="isAuthenticated && !isAdmin" class="readonly-note">

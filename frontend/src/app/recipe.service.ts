@@ -114,10 +114,20 @@ export class RecipeService {
   }
 
   getRecipes(): Observable<Recipe[]> {
+    const token = this.getStoredToken();
+    if (!token) {
+      return this.http.get<Recipe[]>(this.apiUrl);
+    }
+
     return this.withAutoRefresh(() => this.http.get<Recipe[]>(this.apiUrl, this.authOptions()));
   }
 
   getRecipeById(id: string): Observable<Recipe> {
+    const token = this.getStoredToken();
+    if (!token) {
+      return this.http.get<Recipe>(`${this.apiUrl}/${id}`);
+    }
+
     return this.withAutoRefresh(() => this.http.get<Recipe>(`${this.apiUrl}/${id}`, this.authOptions()));
   }
 

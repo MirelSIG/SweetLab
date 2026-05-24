@@ -27,14 +27,14 @@ router.post('/auth/refresh', refresh);
 router.post('/auth/logout', logout);
 
 router.route('/recipes')
-    .get(authenticateToken, getRecipes)
+    .get(getRecipes)
     .post(authenticateToken, requireRole('admin'), createRecipe);
 
 // Ruta para insertar recetas sin validaciones (acepta JSON libre)
 router.post('/recipes/raw', authenticateToken, requireRole('admin'), createRawRecipe);
 
 router.route('/recipes/:id')
-    .get(authenticateToken, getRecipeById)
+    .get(getRecipeById)
     .put(authenticateToken, requireRole('admin'), updateRecipe)
     .delete(authenticateToken, requireRole('admin'), deleteRecipe);
 
