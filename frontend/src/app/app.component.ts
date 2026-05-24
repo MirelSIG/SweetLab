@@ -274,7 +274,7 @@ export class AppComponent implements OnInit {
 
   private async loadAssetImages(): Promise<void> {
     try {
-      const resp = await fetch('/assets/recipes.json');
+      const resp = await fetch('assets/recipes.json');
       if (!resp.ok) return;
       const data: any[] = await resp.json();
       data.forEach((item) => {
