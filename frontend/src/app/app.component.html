@@ -66,13 +66,13 @@
         </p>
       </div>
       <div class="controls">
-        <button *ngIf="isAdmin" type="button" class="btn-primary" (click)="toggleJsonEditor()">Añadir receta</button>
-        <p *ngIf="isAuthenticated && !isAdmin" class="readonly-note">
+        <button type="button" class="btn-primary" (click)="toggleJsonEditor()">Añadir receta</button>
+        <p *ngIf="!isAdmin" class="readonly-note">
             Modo lectura: inicia sesión como admin para crear o editar recetas.
           </p>
       </div>
 
-      <div *ngIf="showJsonEditor && isAdmin" class="editor-shell">
+      <div *ngIf="showJsonEditor" class="editor-shell">
         <div class="editor-tabs">
           <button type="button" [class.active]="editorMode === 'form'" (click)="editorMode = 'form'">Formulario</button>
           <button type="button" [class.active]="editorMode === 'json'" (click)="editorMode = 'json'">JSON</button>
@@ -220,7 +220,7 @@
             </ol>
           </div>
 
-          <div class="detail-actions" *ngIf="isAdmin">
+          <div class="detail-actions">
             <button type="button" class="btn-edit" (click)="startEditing(recipe)">✏️ Editar</button>
             <button type="button" class="btn-delete" (click)="deleteRecipe(recipe)">🗑️ Eliminar</button>
           </div>

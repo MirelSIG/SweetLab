@@ -293,11 +293,6 @@ export class AppComponent implements OnInit {
   }
 
   toggleJsonEditor(): void {
-    if (!this.isAdmin) {
-      this.errorMessage = 'Solo el admin puede crear recetas.';
-      return;
-    }
-
     this.showJsonEditor = !this.showJsonEditor;
     this.successMessage = '';
     this.errorMessage = '';
