@@ -22,6 +22,11 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
+              },
+              {
+                "glob": "*.jpg",
+                "input": "../assets",
+                "output": "assets/originals"
               }
             ],
             "styles": ["src/styles.css"],

@@ -3,7 +3,7 @@
     "id": "luna-vainilla",
     "title": "Tarta Lunar de Vainilla",
     "description": "Bizcocho suave con crema de vainilla y brillo de azúcar dorado.",
-    "imageUrl": "assets/images/luna-vainilla.svg",
+    "imageUrl": "assets/originals/Tarta_decorada1.jpg",
     "ingredients": [
       "2 tazas de harina",
       "1 taza de azúcar",
@@ -25,9 +25,9 @@
   },
   {
     "id": "sol-naranja",
-    "title": "Mousse Solar de Naranja",
+    "title": "Golfeados",
     "description": "Postre cítrico y ligero con notas frescas de ralladura de naranja.",
-    "imageUrl": "assets/images/sol-naranja.svg",
+    "imageUrl": "assets/originals/Golfeados1.jpg",
     "ingredients": [
       "2 naranjas grandes",
       "250 ml de crema para batir",
@@ -48,9 +48,9 @@
   },
   {
     "id": "bosque-vegano",
-    "title": "Ensalada Bosque Esmeralda",
+    "title": "Pastelitos andinos",
     "description": "Ensalada verde con aguacate, pepino y semillas tostadas.",
-    "imageUrl": "assets/images/bosque-vegano.svg",
+    "imageUrl": "assets/originals/pasteles_andinos.jpg",
     "ingredients": [
       "2 tazas de espinaca baby",
       "1 aguacate",
@@ -72,9 +72,9 @@
   },
   {
     "id": "marea-picante",
-    "title": "Sopa de Marea Picante",
+    "title": "Patatas Rellenas Picantes",
     "description": "Caldo especiado con vegetales, maíz y un toque de chile ahumado.",
-    "imageUrl": "assets/images/marea-picante.svg",
+    "imageUrl": "assets/originals/Patatas_rellenas.jpg",
     "ingredients": [
       "1 cebolla",
       "2 dientes de ajo",
@@ -96,9 +96,9 @@
   },
   {
     "id": "cacao-nocturno",
-    "title": "Galletas de Cacao Nocturno",
+    "title": "Rollos de canela",
     "description": "Galletas oscuras con chispas de chocolate y sal marina.",
-    "imageUrl": "assets/images/cacao-nocturno.svg",
+    "imageUrl": "assets/originals/cinnamon_rolls.jpg",
     "ingredients": [
       "1 taza de mantequilla",
       "1 taza de azúcar morena",
@@ -120,9 +120,9 @@
   },
   {
     "id": "jardin-citron",
-    "title": "Tostadas Jardín Citron",
+    "title": "Empanadas rellenas de pollo, carne y queso",
     "description": "Tostadas con hummus, hierbas frescas y limón confitado.",
-    "imageUrl": "assets/images/jardin-citron.svg",
+    "imageUrl": "assets/originals/Empanadas.jpg",
     "ingredients": [
       "4 rebanadas de pan artesanal",
       "1 taza de hummus",
@@ -144,9 +144,9 @@
   },
   {
     "id": "cachapas",
-    "title": "Cachapas Caseras",
+    "title": "Cachapas Caseras con queso fresco",
     "description": "Cachapas dulces con queso fresco, inspiradas en una receta tradicional venezolana.",
-    "imageUrl": "assets/images/cachapas.svg",
+    "imageUrl": "assets/originals/Cachapa_con_Queso1.jpg",
     "ingredients": [
       "2 tazas de granos de maíz tierno",
       "1/2 taza de leche",
@@ -168,9 +168,9 @@
   },
   {
     "id": "arepa-brillante",
-    "title": "Arepas Brillantes",
+    "title": "Arepas en la plancha",
     "description": "Arepas doradas con queso suave, pensadas para usar fotos de maíz y cocina casera.",
-    "imageUrl": "assets/images/arepa-brillante.svg",
+    "imageUrl": "assets/originals/arepas_en_coccion.jpg",
     "ingredients": [
       "2 tazas de harina de maíz precocida",
       "2 tazas de agua tibia",
@@ -191,9 +191,9 @@
   },
   {
     "id": "pan-caldeado",
-    "title": "Pan Caldeado de Hogar",
+    "title": "Pan de Jamon Navideno",
     "description": "Pan suave y tibio, inspirado en las fotos de panes y mesas familiares.",
-    "imageUrl": "assets/images/pan-caldeado.svg",
+    "imageUrl": "assets/originals/Pan_de_Jamon.jpg",
     "ingredients": [
       "3 tazas de harina de trigo",
       "1 taza de leche",
@@ -215,9 +215,9 @@
   },
   {
     "id": "dulce-solar",
-    "title": "Dulce Solar de Frutas",
+    "title": "Penecillos dulces rellenos de mermelada de frutas",
     "description": "Postre de frutas brillantes para acompañar imágenes luminosas y coloridas.",
-    "imageUrl": "assets/images/dulce-solar.svg",
+    "imageUrl": "assets/originals/panecillos_dulces_rellenos_1.jpg",
     "ingredients": [
       "1 taza de mango picado",
       "1 taza de piña picada",
