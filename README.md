@@ -486,3 +486,10 @@ El navegador se abrirá automáticamente en `http://localhost:4200` (o en el pue
 
 ## 16) Proximo paso sugerido (opcional)
 
+## 17) Imágenes y permisos (producción)
+
+- **Sitio en producción:** https://sweetlab-kf27.onrender.com
+- **Visualización:** Cualquiera puede ver las imágenes que se incluyen en `frontend/src/assets` y las imágenes asociadas a cada receta desde la interfaz pública; las imágenes son de solo lectura para usuarios externos.
+- **Edición / Subida de recetas e imágenes:** Solo los usuarios con rol **admin** pueden crear, subir o editar recetas (incluyendo adjuntar imágenes). Las rutas de creación/actualización/eliminación (`POST`, `PUT`, `DELETE`) están protegidas por el middleware `requireRole('admin')` en el backend, por lo que usuarios `externo` solo tienen permiso de lectura.
+- **Reglas de contraseña:** Al registrar una cuenta nueva, la contraseña debe tener al menos 8 caracteres y contener al menos una letra mayúscula, una letra minúscula y un número.
+
