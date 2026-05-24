@@ -15,6 +15,8 @@ import { RecipeService } from './recipe.service';
 export class AppComponent implements OnInit {
   private readonly passwordRulesMessage = 'La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula y un número.';
   recipes: Recipe[] = [];
+  // Map of fallback images loaded from frontend assets (id/title -> imageUrl)
+  assetImageMap: Record<string, string> = {};
   selectedRecipe?: Recipe;
   searchTerm = '';
   loading = false;
@@ -66,11 +68,15 @@ export class AppComponent implements OnInit {
       this.userRole = storedRole;
       this.currentUserName = storedUsername || storedRole;
       this.sessionBanner = `Ya estás registrado como ${this.currentUserName} y puedes continuar como ${storedRole}.`;
-      this.loadRecipes();
+      // Load local asset images first so we can fallback when API recipes don't include images
+      this.loadAssetImages().finally(() => this.loadRecipes());
       return;
     }
 
-    this.sessionBanner = 'Ingresa usuario y contraseña para iniciar sesión o registrarte.';
+    // Load asset images for public view even when not authenticated
+    this.loadAssetImages().finally(() => {
+      this.sessionBanner = 'Ingresa usuario y contraseña para iniciar sesión o registrarte.';
+    });
   }
 
   get isAuthenticated(): boolean {
@@ -251,7 +257,34 @@ export class AppComponent implements OnInit {
   }
 
   getRecipeImage(recipe: Recipe): string {
-    return (recipe.imageUrl || '').trim();
+    const fromRecipe = (recipe.imageUrl || '').trim();
+    if (fromRecipe) return fromRecipe;
+
+    // Try by id -> title (lowercased) fallbacks from assets
+    const maybeId = (recipe.id || recipe._id || '').toString();
+    if (maybeId && this.assetImageMap[maybeId]) return this.assetImageMap[maybeId];
+
+    const titleKey = (recipe.title || '').toString().toLowerCase();
+    if (titleKey && this.assetImageMap[titleKey]) return this.assetImageMap[titleKey];
+
+    // Final fallback: empty string so template shows the placeholder
+    return '';
+  }
+
+  private async loadAssetImages(): Promise<void> {
+    try {
+      const resp = await fetch('/assets/recipes.json');
+      if (!resp.ok) return;
+      const data: any[] = await resp.json();
+      data.forEach((item) => {
+        if (!item) return;
+        if (item.id) this.assetImageMap[item.id] = item.imageUrl || '';
+        if (item.title) this.assetImageMap[item.title.toString().toLowerCase()] = item.imageUrl || '';
+      });
+    } catch (err) {
+      // ignore - fallback to API-only behavior
+      console.warn('No se pudieron cargar las imágenes de assets:', err);
+    }
   }
 
   getCreateRecipeImage(): string {
