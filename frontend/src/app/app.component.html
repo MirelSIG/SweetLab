@@ -21,13 +21,13 @@
 
     <div class="hero-visual" aria-hidden="true">
       <figure class="hero-visual__tile hero-visual__tile--large">
-        <img src="assets/originals/Tarta_decorada1.jpg" alt="Tarta decorada" loading="lazy" />
+        <img src="assets/images/cachapas.svg" alt="Cachapas caseras" loading="lazy" />
       </figure>
       <figure class="hero-visual__tile hero-visual__tile--tall">
-        <img src="assets/originals/arepas_en_coccion.jpg" alt="Arepas en cocción" loading="lazy" />
+        <img src="assets/images/arepa-brillante.svg" alt="Arepas brillantes" loading="lazy" />
       </figure>
       <figure class="hero-visual__tile hero-visual__tile--wide">
-        <img src="assets/originals/Pan_de_Jamon2.jpg" alt="Pan de jamón" loading="lazy" />
+        <img src="assets/images/bosque-vegano.svg" alt="Ensalada bosque esmeralda" loading="lazy" />
       </figure>
     </div>
 
@@ -62,11 +62,9 @@
       <div class="inspiration-strip">
         <h3>Ideas tomadas de las imágenes</h3>
         <p>
-          Cachapas, arepas, panes dorados y postres frutales son el punto de partida para crear recetas visuales y
-          fáciles de reconocer.
+          Cachapas, arepas, panes de jamon y postres son el punto de partida para crear recetas.
         </p>
       </div>
-
       <div class="controls">
         <button *ngIf="isAdmin" type="button" class="btn-primary" (click)="toggleJsonEditor()">Añadir receta</button>
         <p *ngIf="isAuthenticated && !isAdmin" class="readonly-note">
