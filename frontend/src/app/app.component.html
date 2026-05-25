@@ -8,14 +8,18 @@
       </div>
     </div>
 
+    <div class="auth-actions">
+      <button type="button" class="btn-register" (click)="registerAdmin()">Registrar admin</button>
+    </div>
+
   </header>
 
   <section class="hero">
     <div class="hero-copy">
       <h2 class="hero-title">Recetas, edición y experimentación</h2>
-      <p class="hero-kicker">Laboratorio de Mailisol para explorar, registrar y mejorar sus recetas.</p>
+      <p class="hero-kicker">Explora, crea y organiza recetas con imágenes locales y un flujo de edición simple.</p>
       <p class="hero-text">
-        Acceso de edición limitado a administradores.
+        Busca por nombre, abre una receta y edita solo cuando tengas permisos de administrador.
       </p>
     </div>
 
@@ -32,7 +36,8 @@
     </div>
 
     <label class="search-box">
-      <span>Buscar receta</span>
+      <span class="search-box__label">Buscar receta</span>
+      <p class="search-box__hint">Escribe un nombre, ingrediente o tipo de plato.</p>
       <input
         type="text"
         [value]="searchTerm"
@@ -60,10 +65,7 @@
   <section class="content-grid">
     <div class="recipe-list" aria-label="Listado de recetas">
       <div class="inspiration-strip">
-        <h3>Ideas tomadas de las imágenes</h3>
-        <p>
-          Cachapas, arepas, panes de jamon y postres son el punto de partida para crear recetas.
-        </p>
+        <h3>Cachapas, arepas, panes de jamon y postres son el punto de partida para crear recetas.</h3>
       </div>
       <div class="controls">
         <button type="button" class="btn-primary" (click)="toggleJsonEditor()">Añadir receta</button>
@@ -73,13 +75,7 @@
       </div>
 
       <div *ngIf="showJsonEditor" class="editor-shell">
-        <div class="editor-tabs">
-          <button type="button" [class.active]="editorMode === 'form'" (click)="editorMode = 'form'">Formulario</button>
-          <button type="button" [class.active]="editorMode === 'json'" (click)="editorMode = 'json'">JSON</button>
-          <button type="button" class="close-btn" (click)="toggleJsonEditor()">Cerrar</button>
-        </div>
-
-        <form *ngIf="editorMode === 'form'" (ngSubmit)="submitSimpleForm()" class="simple-form">
+        <form (ngSubmit)="submitSimpleForm()" class="simple-form">
           <label>Nombre de tu receta</label>
           <input type="text" [(ngModel)]="simpleTitle" (ngModelChange)="saveDraft()" name="title" required />
 
@@ -128,14 +124,6 @@
             <button type="button" (click)="resetSimpleForm()">Limpiar</button>
           </div>
         </form>
-
-        <div *ngIf="editorMode === 'json'" class="json-editor">
-          <label>JSON de la receta (se enviará tal cual, sin restricciones):</label>
-          <textarea [(ngModel)]="rawJson" name="rawJson" rows="10"></textarea>
-          <div class="editor-actions">
-            <button type="button" (click)="submitRawJson()" [disabled]="submittingRaw">Enviar JSON</button>
-          </div>
-        </div>
 
         <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
         <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>

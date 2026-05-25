@@ -75,6 +75,10 @@ export class RecipeService {
     return this.http.post<AuthResponse>(`${this.apiBaseUrl}/auth/refresh`, { refreshToken });
   }
 
+  registerAdmin(username: string, password: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiBaseUrl}/auth/register`, { username, password });
+  }
+
   private withAutoRefresh<T>(requestFactory: () => Observable<T>): Observable<T> {
     return requestFactory().pipe(
       catchError((error) => {

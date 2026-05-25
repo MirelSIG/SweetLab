@@ -22,9 +22,7 @@ export class AppComponent implements OnInit {
   userRole: 'admin' | null = null;
 
   showJsonEditor = false;
-  rawJson = '{\n  "title": "Nueva receta libre",\n  "ingredients": ["ingrediente 1"],\n  "steps": ["paso 1"]\n}';
   submittingRaw = false;
-  editorMode: 'form' | 'json' = 'form';
 
   simpleTitle = '';
   simpleIngredients = '';
@@ -261,8 +259,7 @@ export class AppComponent implements OnInit {
       tags: this.simpleTags,
       prepTime: this.simplePrepTime,
       imagePath: this.simpleImagePath,
-      difficulty: this.simpleDifficulty,
-      editorMode: this.editorMode
+      difficulty: this.simpleDifficulty
     };
 
     try {
@@ -284,7 +281,6 @@ export class AppComponent implements OnInit {
       this.simplePrepTime = draft.prepTime || '';
       this.simpleImagePath = draft.imagePath || '';
       this.simpleDifficulty = draft.difficulty || '';
-      this.editorMode = draft.editorMode || this.editorMode;
       this.simpleImagePreview = '';
       this.simpleImageFileName = '';
     } catch (e) {
@@ -301,37 +297,6 @@ export class AppComponent implements OnInit {
     } else {
       this.clearSimpleImage();
     }
-  }
-
-  submitRawJson(): void {
-    if (!this.isAdmin) {
-      this.errorMessage = 'Solo el admin puede crear recetas.';
-      return;
-    }
-
-    let payload: any;
-    try {
-      payload = JSON.parse(this.rawJson);
-    } catch (err) {
-      this.errorMessage = 'JSON inválido. Corrige la sintaxis antes de enviar.';
-      return;
-    }
-
-    this.submittingRaw = true;
-    this.recipeService.createRawRecipe(payload).subscribe({
-      next: () => {
-        this.submittingRaw = false;
-        this.errorMessage = '';
-        this.showJsonEditor = false;
-        this.loadRecipes();
-        this.successMessage = 'Receta enviada correctamente.';
-      },
-      error: (err) => {
-        console.error('Error al insertar JSON raw:', err);
-        this.submittingRaw = false;
-        this.errorMessage = 'Error al insertar la receta (ver consola).';
-      }
-    });
   }
 
   submitSimpleForm(): void {
@@ -554,5 +519,37 @@ export class AppComponent implements OnInit {
   isEditingRecipe(recipe: Recipe): boolean {
     const recipeId = recipe._id || recipe.id;
     return this.editingRecipeId === recipeId;
+  }
+
+  registerAdmin(): void {
+    const username = window.prompt('Usuario para admin', 'admin');
+    if (!username || !username.trim()) {
+      return;
+    }
+
+    const password = window.prompt('Contraseña para admin');
+    if (!password || !password.trim()) {
+      return;
+    }
+
+    this.recipeService.registerAdmin(username.trim(), password).subscribe({
+      next: (response) => {
+        this.recipeService.setSession(response.token, response.refreshToken, response.role, username.trim());
+        this.userRole = response.role;
+        this.errorMessage = '';
+        this.successMessage = 'Admin registrado y sesión iniciada.';
+        this.loadRecipes();
+      },
+      error: (err) => {
+        console.error('Error al registrar admin:', err);
+        if (err.status === 409) {
+          this.errorMessage = 'Ese usuario ya existe.';
+        } else if (err.status === 400) {
+          this.errorMessage = err.error?.message || 'Datos inválidos para registrar admin.';
+        } else {
+          this.errorMessage = 'No se pudo registrar el admin (ver consola).';
+        }
+      }
+    });
   }
 }

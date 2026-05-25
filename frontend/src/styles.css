@@ -19,8 +19,8 @@ body {
   display: block;
   margin-bottom: 6px;
   color: #6b7280;
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 1.02rem;
+  font-weight: 500;
   letter-spacing: 0;
   text-transform: none;
 }
@@ -40,8 +40,8 @@ body {
 .hero-copy h2,
 .hero-title {
   margin: 0;
-  color: #111827;
-  font-size: clamp(1.8rem, 4vw, 3.1rem);
+  color: #ea580c, #f97316 65%, #fb923c;
+  font-size: clamp(1.8rem, 10vw, 3.1rem);
   line-height: 0.98;
 }
 
@@ -147,8 +147,8 @@ body {
   .hero-copy h2,
   .hero-title {
     margin: 0;
-    color: #111827;
-    font-size: clamp(1.8rem, 4vw, 3.1rem);
+    color: #cb5613;
+    font-size: clamp(1.8rem, 10vw, 3.1rem);
     line-height: 0.98;
   }
 
