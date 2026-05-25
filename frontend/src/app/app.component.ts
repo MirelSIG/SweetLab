@@ -15,11 +15,31 @@ export class AppComponent implements OnInit {
   recipes: Recipe[] = [];
   // Map of fallback images loaded from frontend assets (id/title -> imageUrl)
   assetImageMap: Record<string, string> = {};
+  private readonly localOriginalsFallback = [
+    'assets/Tarta_decorada1.jpg',
+    'assets/arepas_en_coccion.jpg',
+    'assets/Pan_de_Jamon2.jpg',
+    'assets/Cachapa_con_Queso1.jpg',
+    'assets/Golfeados1.jpg',
+    'assets/Empanadas.jpg',
+    'assets/cinnamon_rolls.jpg',
+    'assets/pasteles_andinos.jpg',
+    'assets/Patatas_rellenas.jpg',
+    'assets/panecillos_dulces_rellenos_1.jpg',
+    'assets/Pan_de_Jamon.jpg',
+    'assets/Patacon1.jpg',
+    'assets/bollos_pelones.jpg',
+    'assets/hallacas1.jpg'
+  ];
   selectedRecipe?: Recipe;
   searchTerm = '';
   loading = false;
   errorMessage = '';
   userRole: 'admin' | null = null;
+  currentUsername = '';
+  authUsername = 'admin';
+  authPassword = '';
+  showAuthPanel = false;
 
   showJsonEditor = false;
   submittingRaw = false;
@@ -53,10 +73,15 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     const storedToken = this.recipeService.getStoredToken();
-    const storedRole = this.recipeService.getStoredRole();
+    const storedRole = this.recipeService.getStoredRole() || this.recipeService.getStoredRoleFromToken();
+    const storedUsername = this.recipeService.getStoredUsername() || this.recipeService.getStoredUsernameFromToken();
 
     if (storedToken && storedRole) {
       this.userRole = storedRole;
+      this.currentUsername = storedUsername;
+      if (storedUsername) {
+        this.authUsername = storedUsername;
+      }
       // Load local asset images first so we can fallback when API recipes don't include images
       this.loadAssetImages().finally(() => this.loadRecipes());
       return;
@@ -89,6 +114,7 @@ export class AppComponent implements OnInit {
           this.errorMessage = 'No tienes permisos para editar recetas.';
           this.recipeService.clearSession();
           this.userRole = null;
+          this.currentUsername = '';
         } else {
           this.errorMessage = 'No se pudo conectar a la API. Verifica que el backend esté corriendo en http://localhost:4000';
         }
@@ -144,7 +170,7 @@ export class AppComponent implements OnInit {
 
   getRecipeImage(recipe: Recipe): string {
     const fromRecipe = (recipe.imageUrl || '').trim();
-    if (fromRecipe) return fromRecipe;
+    if (fromRecipe) return this.normalizeImagePath(fromRecipe);
 
     // Try by id -> title (lowercased) fallbacks from assets
     const maybeId = (recipe.id || recipe._id || '').toString();
@@ -153,8 +179,26 @@ export class AppComponent implements OnInit {
     const titleKey = (recipe.title || '').toString().toLowerCase();
     if (titleKey && this.assetImageMap[titleKey]) return this.assetImageMap[titleKey];
 
-    // Final fallback: empty string so template shows the placeholder
-    return '';
+    const recipeKey = `${maybeId}|${titleKey}`;
+    const hash = recipeKey
+      .split('')
+      .reduce((acc, char) => (acc + char.charCodeAt(0)) % this.localOriginalsFallback.length, 0);
+
+    // Final fallback: always show one local image instead of text-only cards.
+    return this.localOriginalsFallback[hash];
+  }
+
+  getRecipeImageByIndex(recipe: Recipe, index: number): string {
+    const image = this.getRecipeImage(recipe);
+    if (image) {
+      return image;
+    }
+
+    if (Number.isFinite(index) && index >= 0) {
+      return this.localOriginalsFallback[index % this.localOriginalsFallback.length];
+    }
+
+    return this.localOriginalsFallback[0];
   }
 
   private async loadAssetImages(): Promise<void> {
@@ -164,13 +208,59 @@ export class AppComponent implements OnInit {
       const data: any[] = await resp.json();
       data.forEach((item) => {
         if (!item) return;
-        if (item.id) this.assetImageMap[item.id] = item.imageUrl || '';
-        if (item.title) this.assetImageMap[item.title.toString().toLowerCase()] = item.imageUrl || '';
+        const img = this.normalizeImagePath(item.imageUrl || '');
+        if (item.id) this.assetImageMap[item.id] = img;
+        if (item.title) this.assetImageMap[item.title.toString().toLowerCase()] = img;
       });
     } catch (err) {
       // ignore - fallback to API-only behavior
       console.warn('No se pudieron cargar las imágenes de assets:', err);
     }
+  }
+
+  // Normalize various image path formats into paths usable by the frontend assets pipeline.
+  // Accepts: data: URIs, absolute http(s), '/assets/..', 'assets/..', plain filenames, or paths.
+  private normalizeImagePath(path: string): string {
+    const p = (path || '').toString().trim();
+    if (!p) return '';
+
+    // Keep data URIs and external URLs as-is
+    if (p.startsWith('data:') || p.startsWith('http://') || p.startsWith('https://')) return p;
+
+    // Normalize app-relative paths like ./assets/... or /assets/...
+    const appRelative = p.replace(/^\.\//, '').replace(/^\//, '');
+
+    if (appRelative.startsWith('assets/')) {
+      return appRelative;
+    }
+
+    // Strip leading slash to make paths relative to the app root
+    const stripped = appRelative;
+
+    // If already refers to assets, normalize basename and return assets path
+    if (stripped.startsWith('assets/')) {
+      const parts = stripped.split('/');
+      const basename = parts.pop() || '';
+      const clean = basename.toLowerCase().replace(/\s+/g, '_');
+      // ensure originals folder
+      const dir = parts.join('/');
+      if (dir.includes('originals')) {
+        return `assets/originals/${clean}`;
+      }
+      return `${dir}/${clean}`;
+    }
+
+    // If it already references an originals folder anywhere, map inside assets/originals with normalized basename
+    if (stripped.includes('originals/')) {
+      const parts = stripped.split('/');
+      const basename = parts.pop() || stripped;
+      const clean = basename.toLowerCase().replace(/\s+/g, '_');
+      return `assets/originals/${clean}`;
+    }
+
+    // Otherwise assume it's a filename or arbitrary path: map to assets/originals/<basename-lowercased>
+    const basename = stripped.split('/').pop() || stripped;
+    return `assets/originals/${basename.toLowerCase().replace(/\s+/g, '_')}`;
   }
 
   getCreateRecipeImage(): string {
@@ -522,20 +612,25 @@ export class AppComponent implements OnInit {
   }
 
   registerAdmin(): void {
-    const username = window.prompt('Usuario para admin', 'admin');
-    if (!username || !username.trim()) {
+    const username = this.authUsername.trim();
+    const password = this.authPassword.trim();
+
+    if (!username) {
+      this.errorMessage = 'Ingresa un usuario para registrar admin.';
       return;
     }
 
-    const password = window.prompt('Contraseña para admin');
-    if (!password || !password.trim()) {
+    if (!password) {
+      this.errorMessage = 'Ingresa una contraseña para registrar admin.';
       return;
     }
 
-    this.recipeService.registerAdmin(username.trim(), password).subscribe({
+    this.recipeService.registerAdmin(username, password).subscribe({
       next: (response) => {
-        this.recipeService.setSession(response.token, response.refreshToken, response.role, username.trim());
+        this.recipeService.setSession(response.token, response.refreshToken, response.role, username);
         this.userRole = response.role;
+        this.currentUsername = username;
+        this.authPassword = '';
         this.errorMessage = '';
         this.successMessage = 'Admin registrado y sesión iniciada.';
         this.loadRecipes();
@@ -543,7 +638,7 @@ export class AppComponent implements OnInit {
       error: (err) => {
         console.error('Error al registrar admin:', err);
         if (err.status === 409) {
-          this.errorMessage = 'Ese usuario ya existe.';
+          this.errorMessage = 'Ese usuario ya existe. Usa "Iniciar admin" para entrar.';
         } else if (err.status === 400) {
           this.errorMessage = err.error?.message || 'Datos inválidos para registrar admin.';
         } else {
@@ -551,5 +646,65 @@ export class AppComponent implements OnInit {
         }
       }
     });
+  }
+
+  loginAdmin(): void {
+    const username = this.authUsername.trim();
+    const password = this.authPassword.trim();
+
+    if (!username) {
+      this.errorMessage = 'Ingresa un usuario admin.';
+      return;
+    }
+
+    if (!password) {
+      this.errorMessage = 'Ingresa la contraseña de admin.';
+      return;
+    }
+
+    this.recipeService.loginAdmin(username, password).subscribe({
+      next: (response) => {
+        this.recipeService.setSession(response.token, response.refreshToken, response.role, username);
+        this.userRole = response.role;
+        this.currentUsername = username;
+        this.authPassword = '';
+        this.errorMessage = '';
+        this.successMessage = 'Sesión admin iniciada correctamente.';
+        this.loadRecipes();
+      },
+      error: (err) => {
+        console.error('Error al iniciar sesión admin:', err);
+        if (err.status === 401) {
+          this.errorMessage = 'Credenciales inválidas para admin.';
+        } else if (err.status === 429) {
+          this.errorMessage = err.error?.message || 'Demasiados intentos. Intenta de nuevo más tarde.';
+        } else {
+          this.errorMessage = 'No se pudo iniciar sesión admin (ver consola).';
+        }
+      }
+    });
+  }
+
+  logout(): void {
+    this.recipeService.clearSession(true);
+    this.userRole = null;
+    this.currentUsername = '';
+    this.authPassword = '';
+    this.showAuthPanel = false;
+    this.editingRecipeId = null;
+    this.showJsonEditor = false;
+    this.successMessage = 'Sesión cerrada.';
+    this.errorMessage = '';
+  }
+
+  toggleAuthPanel(): void {
+    this.showAuthPanel = !this.showAuthPanel;
+    if (this.showAuthPanel && !this.authUsername) {
+      this.authUsername = 'admin';
+    }
+    if (this.showAuthPanel) {
+      this.errorMessage = '';
+      this.successMessage = '';
+    }
   }
 }

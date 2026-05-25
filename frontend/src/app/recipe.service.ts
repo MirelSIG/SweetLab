@@ -14,16 +14,22 @@ export interface AuthResponse {
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
   private readonly http = inject(HttpClient);
-  private readonly apiBaseUrl = '/api';
-  private readonly apiUrl = '/api/recipes';
+  private readonly isLocalDev = typeof window !== 'undefined' && window.location.port === '4200';
+  private readonly apiBaseUrl = this.isLocalDev ? 'http://localhost:4000/api' : '/api';
+  private readonly apiUrl = `${this.apiBaseUrl}/recipes`;
   private readonly tokenStorageKey = 'sweetlabAuthToken';
   private readonly refreshTokenStorageKey = 'sweetlabRefreshToken';
   private readonly roleStorageKey = 'sweetlabUserRole';
+  private readonly usernameStorageKey = 'sweetlabUsername';
 
   setSession(token: string, refreshToken: string, role: 'admin', username?: string): void {
     localStorage.setItem(this.tokenStorageKey, token);
     localStorage.setItem(this.refreshTokenStorageKey, refreshToken);
     localStorage.setItem(this.roleStorageKey, role);
+    const normalizedUsername = (username || '').trim();
+    if (normalizedUsername) {
+      localStorage.setItem(this.usernameStorageKey, normalizedUsername);
+    }
   }
 
   clearSession(logoutOnServer = false): void {
@@ -44,6 +50,7 @@ export class RecipeService {
     localStorage.removeItem(this.tokenStorageKey);
     localStorage.removeItem(this.refreshTokenStorageKey);
     localStorage.removeItem(this.roleStorageKey);
+    localStorage.removeItem(this.usernameStorageKey);
   }
 
   getStoredToken(): string {
@@ -57,6 +64,56 @@ export class RecipeService {
   getStoredRole(): 'admin' | null {
     const role = localStorage.getItem(this.roleStorageKey);
     return role === 'admin' ? role : null;
+  }
+
+  getStoredUsername(): string {
+    return localStorage.getItem(this.usernameStorageKey) || '';
+  }
+
+  getStoredRoleFromToken(): 'admin' | null {
+    const token = this.getStoredToken();
+    if (!token) {
+      return null;
+    }
+
+    const parts = token.split('.');
+    if (parts.length < 2) {
+      return null;
+    }
+
+    try {
+      const base64Url = parts[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const paddedBase64 = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
+      const payload = JSON.parse(atob(paddedBase64));
+
+      return payload?.role === 'admin' ? 'admin' : null;
+    } catch {
+      return null;
+    }
+  }
+
+  getStoredUsernameFromToken(): string {
+    const token = this.getStoredToken();
+    if (!token) {
+      return '';
+    }
+
+    const parts = token.split('.');
+    if (parts.length < 2) {
+      return '';
+    }
+
+    try {
+      const base64Url = parts[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const paddedBase64 = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
+      const payload = JSON.parse(atob(paddedBase64));
+
+      return typeof payload?.username === 'string' ? payload.username : '';
+    } catch {
+      return '';
+    }
   }
 
   private authOptions(): { headers: HttpHeaders } {
@@ -77,6 +134,10 @@ export class RecipeService {
 
   registerAdmin(username: string, password: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiBaseUrl}/auth/register`, { username, password });
+  }
+
+  loginAdmin(username: string, password: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiBaseUrl}/auth/login`, { username, password });
   }
 
   private withAutoRefresh<T>(requestFactory: () => Observable<T>): Observable<T> {

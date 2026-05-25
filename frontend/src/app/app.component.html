@@ -9,7 +9,34 @@
     </div>
 
     <div class="auth-actions">
-      <button type="button" class="btn-register" (click)="registerAdmin()">Registrar admin</button>
+      <p *ngIf="isAuthenticated" class="auth-badge">Admin conectado: {{ currentUsername || 'admin' }}</p>
+      <button type="button" class="btn-register" (click)="toggleAuthPanel()">
+        {{ showAuthPanel ? 'Ocultar acceso' : 'Acceso admin' }}
+      </button>
+    </div>
+
+    <div *ngIf="showAuthPanel" class="auth-panel">
+      <input
+        type="text"
+        [(ngModel)]="authUsername"
+        name="authUsername"
+        class="auth-input"
+        placeholder="Usuario admin"
+        autocomplete="username"
+      />
+      <input
+        type="password"
+        [(ngModel)]="authPassword"
+        name="authPassword"
+        class="auth-input"
+        placeholder="Contraseña"
+        autocomplete="current-password"
+      />
+      <div class="auth-panel__actions">
+        <button type="button" class="btn-register" (click)="registerAdmin()">Registrar admin</button>
+        <button type="button" class="btn-register" (click)="loginAdmin()">Iniciar admin</button>
+        <button type="button" class="btn-register" *ngIf="isAuthenticated" (click)="logout()">Cerrar sesión</button>
+      </div>
     </div>
 
   </header>
@@ -25,13 +52,13 @@
 
     <div class="hero-visual" aria-hidden="true">
       <figure class="hero-visual__tile hero-visual__tile--large">
-        <img src="assets/images/cachapas.svg" alt="Cachapas caseras" loading="lazy" />
+        <img src="assets/Tarta_decorada1.jpg" alt="Tarta decorada" loading="eager" fetchpriority="high" />
       </figure>
       <figure class="hero-visual__tile hero-visual__tile--tall">
-        <img src="assets/images/arepa-brillante.svg" alt="Arepas brillantes" loading="lazy" />
+        <img src="assets/Golfeados1.jpg" alt="Golfeado" loading="lazy" />
       </figure>
       <figure class="hero-visual__tile hero-visual__tile--wide">
-        <img src="assets/images/bosque-vegano.svg" alt="Ensalada bosque esmeralda" loading="lazy" />
+        <img src="assets/pasteles_andinos.jpg" alt="Pasteles andinos" loading="lazy" />
       </figure>
     </div>
 
@@ -68,7 +95,7 @@
         <h3>Cachapas, arepas, panes de jamon y postres son el punto de partida para crear recetas.</h3>
       </div>
       <div class="controls">
-        <button type="button" class="btn-primary" (click)="toggleJsonEditor()">Añadir receta</button>
+        <button type="button" class="btn-primary" [disabled]="!isAdmin" (click)="toggleJsonEditor()">Añadir receta</button>
         <p *ngIf="!isAdmin" class="readonly-note">
             Modo lectura: inicia sesión como admin para crear o editar recetas.
           </p>
@@ -140,7 +167,7 @@
         [class.active]="(selectedRecipe?._id || selectedRecipe?.id) === (recipe._id || recipe.id)"
         (click)="selectRecipe(recipe)"
       >
-        <ng-container *ngIf="getRecipeImage(recipe) as recipeImage; else recipeFallback">
+        <ng-container *ngIf="getRecipeImageByIndex(recipe, recipeIndex) as recipeImage; else recipeFallback">
           <div class="recipe-media">
             <img [src]="recipeImage" [alt]="recipe.title" title="Imagen de la receta" loading="lazy" />
           </div>
@@ -174,7 +201,7 @@
         <div *ngIf="!isEditingRecipe(recipe)">
           <p class="detail-label">Receta seleccionada</p>
 
-          <ng-container *ngIf="getRecipeImage(recipe) as recipeImage; else detailFallback">
+          <ng-container *ngIf="getRecipeImageByIndex(recipe, filteredRecipes.indexOf(recipe)) as recipeImage; else detailFallback">
             <div class="detail-media">
               <img [src]="recipeImage" [alt]="recipe.title" title="Imagen de la receta" loading="lazy" />
             </div>
@@ -208,10 +235,11 @@
             </ol>
           </div>
 
-          <div class="detail-actions">
+          <div *ngIf="isAdmin" class="detail-actions">
             <button type="button" class="btn-edit" (click)="startEditing(recipe)">✏️ Editar</button>
             <button type="button" class="btn-delete" (click)="deleteRecipe(recipe)">🗑️ Eliminar</button>
           </div>
+          <p *ngIf="!isAdmin" class="readonly-note">Inicia sesión como admin para editar o eliminar esta receta.</p>
         </div>
 
         <div *ngIf="isEditingRecipe(recipe)" class="edit-form">

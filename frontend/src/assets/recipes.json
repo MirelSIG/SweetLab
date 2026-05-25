@@ -3,7 +3,7 @@
     "id": "luna-vainilla",
     "title": "Receta visual 01",
     "description": "Imagen destacada para completar después.",
-    "imageUrl": "assets/originals/Tarta_decorada1.jpg",
+    "imageUrl": "./assets/Tarta_decorada1.jpg",
     "ingredients": [
       "2 tazas de harina",
       "1 taza de azúcar",
@@ -27,7 +27,7 @@
     "id": "arepa-brillante",
     "title": "Receta visual 02",
     "description": "Imagen destacada para completar después.",
-    "imageUrl": "assets/originals/arepas_en_coccion.jpg",
+    "imageUrl": "./assets/arepas_en_coccion.jpg",
     "ingredients": [
       "2 tazas de harina de maíz precocida",
       "2 tazas de agua tibia",
@@ -50,7 +50,7 @@
     "id": "pan-caldeado",
     "title": "Receta visual 03",
     "description": "Imagen destacada para completar después.",
-    "imageUrl": "assets/originals/Pan_de_Jamon2.jpg",
+    "imageUrl": "./assets/Pan_de_Jamon2.jpg",
     "ingredients": [
       "3 tazas de harina de trigo",
       "1 taza de leche",
@@ -74,7 +74,7 @@
     "id": "cachapas",
     "title": "Receta visual 04",
     "description": "Imagen destacada para completar después.",
-    "imageUrl": "assets/originals/Cachapa_con_Queso1.jpg",
+    "imageUrl": "./assets/Cachapa_con_Queso1.jpg",
     "ingredients": [
       "2 tazas de granos de maíz tierno",
       "1/2 taza de leche",
@@ -98,7 +98,7 @@
     "id": "sol-naranja",
     "title": "Receta visual 05",
     "description": "Imagen destacada para completar después.",
-    "imageUrl": "assets/originals/Golfeados1.jpg",
+    "imageUrl": "./assets/Golfeados1.jpg",
     "ingredients": [
       "2 naranjas grandes",
       "250 ml de crema para batir",
@@ -121,7 +121,7 @@
     "id": "jardin-citron",
     "title": "Receta visual 06",
     "description": "Imagen destacada para completar después.",
-    "imageUrl": "assets/originals/Empanadas.jpg",
+    "imageUrl": "./assets/Empanadas.jpg",
     "ingredients": [
       "4 rebanadas de pan artesanal",
       "1 taza de hummus",
@@ -145,7 +145,7 @@
     "id": "cacao-nocturno",
     "title": "Galletas de cacao nocturno",
     "description": "Imagen destacada para completar después.",
-    "imageUrl": "assets/originals/cinnamon_rolls.jpg",
+    "imageUrl": "./assets/cinnamon_rolls.jpg",
     "ingredients": [
       "1 taza de mantequilla",
       "1 taza de azúcar morena",
@@ -169,7 +169,7 @@
     "id": "bosque-vegano",
     "title": "Receta visual 08",
     "description": "Imagen destacada para completar después.",
-    "imageUrl": "assets/originals/pasteles_andinos.jpg",
+    "imageUrl": "./assets/pasteles_andinos.jpg",
     "ingredients": [
       "2 tazas de espinaca baby",
       "1 aguacate",
@@ -193,7 +193,7 @@
     "id": "marea-picante",
     "title": "Receta visual 09",
     "description": "Imagen destacada para completar después.",
-    "imageUrl": "assets/originals/Patatas_rellenas.jpg",
+    "imageUrl": "./assets/Patatas_rellenas.jpg",
     "ingredients": [
       "1 cebolla",
       "2 dientes de ajo",
@@ -217,7 +217,7 @@
     "id": "dulce-solar",
     "title": "Receta visual 10",
     "description": "Imagen destacada para completar después.",
-    "imageUrl": "assets/originals/panecillos_dulces_rellenos_1.jpg",
+    "imageUrl": "./assets/panecillos_dulces_rellenos_1.jpg",
     "ingredients": [
       "1 taza de mango picado",
       "1 taza de piña picada",
