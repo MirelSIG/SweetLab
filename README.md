@@ -1,42 +1,61 @@
+
 # SweetLab
 
-Proyecto de practica para aprender desarrollo web con:
+Proyecto web full stack culminado: **SweetLab**
 
-- Backend con Node.js + Express + MongoDB (API REST de recetas)
-- Frontend con Angular (interfaz para mostrar recetas)
+SweetLab es una aplicación completa para gestión de recetas, pensada como práctica integral de desarrollo web moderno. Incluye backend (Node.js + Express + MongoDB) y frontend (Angular), con despliegue en producción y documentación detallada.
 
-** Sitio (GitHub Pages): [https://MirelSIG.github.io/SweetLab/](https://MirelSIG.github.io/SweetLab/)
+---
 
-** Desarrollo local:** Arranca el frontend y abre en el navegador: [http://localhost:4200](http://localhost:4200)
+## ¿Qué hace SweetLab?
 
-Para iniciar localmente:
+Permite crear, ver, editar y eliminar recetas de cocina, con autenticación y control de roles. El frontend muestra recetas desde un archivo local o desde la base de datos, según la configuración. El backend expone una API REST segura y validada.
 
-```bash
-cd frontend
-npm install
-npm start
-```
+Para detalles técnicos y explicación profunda de cada parte, consulta la [Guía Explicativa](docs/GUIA/SweetLab_Guia_Explicativa.html) o el PDF equivalente.
 
-Nota: el despliegue a GitHub Pages puede tardar 1-2 minutos tras ejecutar el workflow.
+---
 
-## Despliegue en Producción (Frontend + Backend)
+## ¿Cómo poner en marcha el proyecto? (paso a paso)
 
-Para que la aplicación funcione completamente desde GitHub Pages sin backend local, necesitas:
+1. **Clona el repositorio y entra a la carpeta:**
+    ```bash
+    git clone https://github.com/MirelSIG/SweetLab.git
+    cd SweetLab
+    ```
 
-1. Desplegar el backend en Render (gratuito)
-2. Configurar MongoDB Atlas (gratuito)
-3. Actualizar la URL del backend en el frontend
+2. **Arranca el backend:**
+    ```bash
+    cd backend
+    npm install
+    node src/server.js
+    ```
+    El backend conecta a MongoDB (local o Atlas) y expone la API en el puerto 4000.
 
-Ver instrucciones completas en: [docs/deploy-render.md](docs/deploy-render.md)
+3. **Arranca el frontend en otra terminal:**
+    ```bash
+    cd frontend
+    npm install
+    npm start
+    ```
+    El frontend abre automáticamente en [http://localhost:4200](http://localhost:4200).
 
-Esta guia esta escrita para una persona que empieza en programacion web y tambien empieza con Angular.
+4. **(Opcional) Ejecuta los tests del backend:**
+    ```bash
+    cd backend
+    npm test
+    ```
 
-## 1) Que hace este proyecto
+---
 
-SweetLab permite trabajar recetas de cocina de dos formas:
+## Breve descripción de funcionamiento
 
-- Desde el frontend Angular, que muestra recetas ficticias guardadas en un archivo JSON local.
-- Desde el backend API, que permite crear, leer, actualizar y eliminar recetas reales en MongoDB.
+- El **frontend Angular** permite visualizar, buscar, crear, editar y eliminar recetas. Si el backend está activo, usa la API; si no, muestra recetas ficticias desde un JSON local.
+- El **backend Express** gestiona usuarios, autenticación y recetas en MongoDB, con validaciones y control de acceso por roles.
+- El sistema está pensado para aprender y practicar el ciclo completo de una app web: desde la interfaz hasta la base de datos.
+
+Para detalles de endpoints, validaciones, estructura de carpetas y más, revisa la guía explicativa incluida en el proyecto.
+
+---
 
 En palabras simples:
 
@@ -217,14 +236,9 @@ Ejemplo minimo de body para crear receta:
 
 ## 7) Formas de agregar las recetas de ejemplo
 
-Este proyecto viene con dos recetas de ejemplo en [docs/recipes-example.json](docs/recipes-example.json):
-
-- Brownies Clásicos
-- Tiramisú
-
 ### Opcion 1: POST directo desde terminal con curl
 
-#### Crear Brownies Clásicos
+#### Para crear Brownies Clásicos
 
 ```bash
 curl -X POST http://127.0.0.1:4000/api/recipes \
@@ -251,7 +265,7 @@ Respuesta esperada (si todo va bien):
 }
 ```
 
-#### Crear Tiramisú
+#### Para crear Tiramisú
 
 ```bash
 curl -X POST http://127.0.0.1:4000/api/recipes \
