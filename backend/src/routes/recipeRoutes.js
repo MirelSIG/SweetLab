@@ -1,30 +1,41 @@
 // ¿Qué hace esto?
-
-//     Usa router para definir cada ruta.
-
-//     Cada ruta llama a una función del controlador (recipeController.js).
-
-//     Exporta el router para que pueda usarse en app.js.
-
+// Usa router para definir cada ruta.
+// Cada ruta llama a una función del controlador.
+// Exporta el router para que pueda usarse en app.js.
 
 const express = require('express');
 const router = express.Router();
+
 const {
     createRecipe,
     getRecipes,
     getRecipeById,
     updateRecipe,
-    deleteRecipe
+    deleteRecipe,
+    createRawRecipe
 } = require('../controllers/recipeController');
-const { login, refresh, logout, register } = require('../controllers/authController');
+
+const {
+    login,
+    refresh,
+    logout,
+    register,
+    changePassword   // ← IMPORTACIÓN NECESARIA
+} = require('../controllers/authController');
+
 const { authenticateToken, requireRole } = require('../middlewares/auth');
 
-const { createRawRecipe } = require('../controllers/recipeController');
+// ---------------- AUTH ----------------
 
 router.post('/auth/login', login);
 router.post('/auth/register', register);
 router.post('/auth/refresh', refresh);
 router.post('/auth/logout', logout);
+
+// Nueva ruta para cambiar contraseña del admin
+router.post('/auth/change-password', authenticateToken, requireRole('admin'), changePassword);
+
+// ---------------- RECIPES ----------------
 
 router.route('/recipes')
     .get(getRecipes)

@@ -8,16 +8,19 @@ const REFRESH_TOKEN_SECRET = process.env.JWT_REFRESH_SECRET || 'sweetlab-dev-ref
 const REFRESH_TOKEN_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
 const MAX_LOGIN_ATTEMPTS = Number(process.env.MAX_LOGIN_ATTEMPTS || 5);
 const LOCK_TIME_MINUTES = Number(process.env.LOCK_TIME_MINUTES || 15);
-const PASSWORD_RULES_MESSAGE = 'La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula y un número.';
+const PASSWORD_RULES_MESSAGE =
+  'La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula y un número.';
 
 const failedAttemptsByIdentity = new Map();
 
+// ---------------- VALIDACIONES ----------------
+
 const isPasswordFormatValid = (password) => (
-  typeof password === 'string'
-  && password.length >= 8
-  && /[a-z]/.test(password)
-  && /[A-Z]/.test(password)
-  && /\d/.test(password)
+  typeof password === 'string' &&
+  password.length >= 8 &&
+  /[a-z]/.test(password) &&
+  /[A-Z]/.test(password) &&
+  /\d/.test(password)
 );
 
 const getIdentityKey = (req, username) => {
@@ -42,9 +45,7 @@ const clearFailedAttempts = (identityKey) => {
 
 const getLockRemainingSeconds = (identityKey) => {
   const entry = failedAttemptsByIdentity.get(identityKey);
-  if (!entry || !entry.lockedUntil) {
-    return 0;
-  }
+  if (!entry || !entry.lockedUntil) return 0;
 
   const remainingMs = entry.lockedUntil - Date.now();
   if (remainingMs <= 0) {
@@ -55,38 +56,44 @@ const getLockRemainingSeconds = (identityKey) => {
   return Math.ceil(remainingMs / 1000);
 };
 
-const buildAccessToken = ({ role, username }) => jwt.sign(
-  {
-    role,
-    username,
-    scope: role === 'admin' ? ['recipes:read', 'recipes:write', 'recipes:delete'] : ['recipes:read']
-  },
-  ACCESS_TOKEN_SECRET,
-  { expiresIn: ACCESS_TOKEN_EXPIRES_IN }
-);
+// ---------------- TOKENS ----------------
 
-const buildRefreshToken = ({ userId, role, username }) => jwt.sign(
-  {
-    sub: userId,
-    role,
-    username,
-    tokenType: 'refresh'
-  },
-  REFRESH_TOKEN_SECRET,
-  { expiresIn: REFRESH_TOKEN_EXPIRES_IN }
-);
+const buildAccessToken = ({ role, username }) =>
+  jwt.sign(
+    {
+      role,
+      username,
+      scope: role === 'admin'
+        ? ['recipes:read', 'recipes:write', 'recipes:delete']
+        : ['recipes:read']
+    },
+    ACCESS_TOKEN_SECRET,
+    { expiresIn: ACCESS_TOKEN_EXPIRES_IN }
+  );
+
+const buildRefreshToken = ({ userId, role, username }) =>
+  jwt.sign(
+    {
+      sub: userId,
+      role,
+      username,
+      tokenType: 'refresh'
+    },
+    REFRESH_TOKEN_SECRET,
+    { expiresIn: REFRESH_TOKEN_EXPIRES_IN }
+  );
 
 const storeRefreshToken = async (userId, refreshToken) => {
   const user = await User.findById(userId);
-  if (!user) {
-    return;
-  }
+  if (!user) return;
 
   const existingTokens = user.refreshTokens || [];
   const rotatedTokens = [...existingTokens, refreshToken].slice(-5);
   user.refreshTokens = rotatedTokens;
   await user.save();
 };
+
+// ---------------- REGISTER ----------------
 
 exports.register = async (req, res) => {
   const { username, password } = req.body || {};
@@ -106,7 +113,12 @@ exports.register = async (req, res) => {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const user = await User.create({ username, passwordHash, role: 'admin', refreshTokens: [] });
+    const user = await User.create({
+      username,
+      passwordHash,
+      role: 'admin',
+      refreshTokens: []
+    });
 
     const token = buildAccessToken({ role: user.role, username: user.username });
     const refreshToken = buildRefreshToken({
@@ -117,11 +129,18 @@ exports.register = async (req, res) => {
 
     await storeRefreshToken(user._id, refreshToken);
 
-    return res.status(201).json({ token, refreshToken, role: user.role, expiresIn: ACCESS_TOKEN_EXPIRES_IN });
+    return res.status(201).json({
+      token,
+      refreshToken,
+      role: user.role,
+      expiresIn: ACCESS_TOKEN_EXPIRES_IN
+    });
   } catch (error) {
     return res.status(500).json({ message: 'Error al registrar usuario.' });
   }
 };
+
+// ---------------- LOGIN ----------------
 
 exports.login = async (req, res) => {
   const { username, password } = req.body || {};
@@ -132,6 +151,7 @@ exports.login = async (req, res) => {
 
   const identityKey = getIdentityKey(req, username);
   const lockRemainingSeconds = getLockRemainingSeconds(identityKey);
+
   if (lockRemainingSeconds > 0) {
     return res.status(429).json({
       message: `Cuenta bloqueada temporalmente por intentos fallidos. Intenta de nuevo en ${lockRemainingSeconds} segundos.`
@@ -139,7 +159,6 @@ exports.login = async (req, res) => {
   }
 
   try {
-    // Buscar por username y usar el rol almacenado en el documento de usuario.
     const user = await User.findOne({ username });
 
     if (!user) {
@@ -161,6 +180,7 @@ exports.login = async (req, res) => {
       role: user.role,
       username: user.username
     });
+
     await storeRefreshToken(user._id, refreshToken);
 
     return res.json({
@@ -173,6 +193,8 @@ exports.login = async (req, res) => {
     return res.status(500).json({ message: 'Error al iniciar sesion.' });
   }
 };
+
+// ---------------- REFRESH ----------------
 
 exports.refresh = async (req, res) => {
   const { refreshToken } = req.body || {};
@@ -208,6 +230,7 @@ exports.refresh = async (req, res) => {
       .filter((token) => token !== refreshToken)
       .concat(newRefreshToken)
       .slice(-5);
+
     await user.save();
 
     return res.json({
@@ -221,6 +244,8 @@ exports.refresh = async (req, res) => {
   }
 };
 
+// ---------------- LOGOUT ----------------
+
 exports.logout = async (req, res) => {
   const { refreshToken } = req.body || {};
 
@@ -231,13 +256,46 @@ exports.logout = async (req, res) => {
   try {
     const payload = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
     const user = await User.findById(payload.sub);
+
     if (user) {
       user.refreshTokens = (user.refreshTokens || []).filter((token) => token !== refreshToken);
       await user.save();
     }
   } catch (error) {
-    // Si el token ya expiró, igual finalizamos logout en cliente.
+    // Token expirado → logout igualmente válido
   }
 
   return res.status(204).send();
+};
+
+// ---------------- CHANGE PASSWORD (NUEVO) ----------------
+
+exports.changePassword = async (req, res) => {
+  const { email, newPassword } = req.body || {};
+
+  if (!email || !newPassword) {
+    return res.status(400).json({ message: 'Email y nueva contraseña son obligatorios.' });
+  }
+
+  if (!isPasswordFormatValid(newPassword)) {
+    return res.status(400).json({ message: PASSWORD_RULES_MESSAGE });
+  }
+
+  try {
+    const user = await User.findOne({ username: email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado.' });
+    }
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+    user.passwordHash = hashed;
+
+    await user.save();
+
+    return res.json({ message: 'Contraseña actualizada correctamente.' });
+  } catch (error) {
+    console.error('Error al cambiar contraseña:', error);
+    return res.status(500).json({ message: 'Error interno del servidor.' });
+  }
 };
