@@ -271,10 +271,10 @@ exports.logout = async (req, res) => {
 // ---------------- CHANGE PASSWORD (NUEVO) ----------------
 
 exports.changePassword = async (req, res) => {
-  const { email, newPassword } = req.body || {};
+  const { username, newPassword } = req.body || {};
 
-  if (!email || !newPassword) {
-    return res.status(400).json({ message: 'Email y nueva contraseña son obligatorios.' });
+  if (!username || !newPassword) {
+    return res.status(400).json({ message: 'Nombre de usuario y nueva contraseña son obligatorios.' });
   }
 
   if (!isPasswordFormatValid(newPassword)) {
@@ -282,7 +282,7 @@ exports.changePassword = async (req, res) => {
   }
 
   try {
-    const user = await User.findOne({ username: email });
+    const user = await User.findOne({ username });
 
     if (!user) {
       return res.status(404).json({ message: 'Usuario no encontrado.' });
